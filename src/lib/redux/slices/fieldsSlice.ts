@@ -2,15 +2,9 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
 import { FormField } from '@/types/form';
+import { FieldsState } from '@/types/hook';
 
 import { RootState } from '../store';
-
-
-interface FieldsState {
-  fields: FormField[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-}
 
 const initialState: FieldsState = {
   fields: [],

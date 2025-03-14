@@ -15,9 +15,7 @@ export const DEFAULT_FIELD_VALUES: FieldFormValues = {
 };
 
 interface UseFieldFormProps {
-  /* eslint-disable */
   onSave: (field: FieldFormValues) => Promise<void> | void;
-  /* eslint-enable */
   onClose: () => void;
 }
 

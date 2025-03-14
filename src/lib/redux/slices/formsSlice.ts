@@ -1,20 +1,9 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
+import { Form, FormsState } from '@/types/hook';
+
 import { RootState } from '../store';
-
-export interface Form {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-}
-
-interface FormsState {
-  forms: Form[];
-  status: 'idle' | 'loading' | 'succeeded' | 'failed';
-  error: string | null;
-}
 
 const initialState: FormsState = {
   forms: [
