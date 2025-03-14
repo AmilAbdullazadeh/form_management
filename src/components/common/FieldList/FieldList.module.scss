@@ -23,15 +23,42 @@
   border: 1px solid $gray-200;
   border-radius: $border-radius-sm;
   background-color: $gray-100;
+  transition: all 0.2s ease;
+  cursor: default;
 
   &:hover {
     background-color: $gray-200;
+  }
+  
+  &.dragging {
+    opacity: 0.4;
+    border: 1px dashed $primary;
+  }
+  
+  &[draggable=true] {
+    cursor: grab;
+    
+    &:active {
+      cursor: grabbing;
+    }
   }
 }
 
 .fieldInfo {
   @include flex-center;
   gap: $spacing-sm;
+}
+
+.dragHandle {
+  color: $gray-500;
+  font-size: $font-size-lg;
+  cursor: grab;
+  user-select: none;
+  margin-right: $spacing-xs;
+  
+  &:hover {
+    color: $gray-700;
+  }
 }
 
 .fieldLabel {
@@ -43,7 +70,7 @@
   color: $gray-600;
   padding: $spacing-xs $spacing-sm;
   background-color: $gray-200;
-  border-radius: $border-radius-sm;
+  border-radius: $border-radius-md;
 }
 
 .fieldRequired {
@@ -51,7 +78,7 @@
   color: $danger;
   padding: $spacing-xs $spacing-sm;
   background-color: rgba($danger, 0.1);
-  border-radius: $border-radius-sm;
+  border-radius: $border-radius-md;
 }
 
 .noFields {
@@ -60,7 +87,7 @@
   color: $gray-600;
   background-color: $gray-100;
   border: 1px dashed $gray-300;
-  border-radius: $border-radius-sm;
+  border-radius: $border-radius-md;
 }
 
 .deleteButton {

@@ -3,6 +3,7 @@
 import React from 'react';
 
 import { Button } from '@/components/common/Button';
+import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 
 import styles from './FieldList.module.scss';
 import { FieldListProps } from './types';
@@ -12,9 +13,26 @@ export const FieldList: React.FC<FieldListProps> = ({
   isViewOnly,
   onAddField,
   onDeleteField,
+  onReorderFields,
   addButtonLabel = 'Add Field',
   emptyMessage = 'No fields added yet. Click "Add Field" to add form fields.'
 }) => {
+  const { 
+    isDragging,
+    draggedItem,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    handleDrop
+  } = useDragAndDrop({
+    items: fields,
+    onReorder: (reorderedItems) => {
+      if (onReorderFields) {
+        onReorderFields(reorderedItems);
+      }
+    }
+  });
+
   const handleAddFieldClick = (e: React.MouseEvent) => {
     e.preventDefault();
     onAddField();
@@ -26,6 +44,8 @@ export const FieldList: React.FC<FieldListProps> = ({
       onDeleteField(fieldId);
     }
   };
+
+  const isDragEnabled = !isViewOnly && onReorderFields !== undefined;
 
   return (
     <div className={styles.fieldsSection}>
@@ -45,8 +65,21 @@ export const FieldList: React.FC<FieldListProps> = ({
       {fields.length > 0 ? (
         <div className={styles.fieldsList}>
           {fields.map(field => (
-            <div key={field.id} className={styles.fieldItem}>
+            <div 
+              key={field.id} 
+              className={`${styles.fieldItem} ${draggedItem?.id === field.id ? styles.dragging : ''}`}
+              draggable={isDragEnabled}
+              onDragStart={isDragEnabled ? (e) => handleDragStart(e, field) : undefined}
+              onDragOver={isDragEnabled ? handleDragOver : undefined}
+              onDrop={isDragEnabled ? (e) => handleDrop(e, field) : undefined}
+              onDragEnd={isDragEnabled ? handleDragEnd : undefined}
+            >
               <div className={styles.fieldInfo}>
+                {isDragEnabled && (
+                  <span className={styles.dragHandle} title="Drag to reorder">
+                    ⋮⋮
+                  </span>
+                )}
                 <span className={styles.fieldLabel}>{field.label}</span>
                 <span className={styles.fieldType}>{field.type}</span>
                 {field.required && <span className={styles.fieldRequired}>Required</span>}

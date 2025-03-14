@@ -50,7 +50,7 @@ export const FormModal: React.FC<FormModalProps> = ({
   const formId = isUpdateMode && initialForm?.id ? initialForm.id : tempFormIdRef.current;
   const formFields = useSelector((state: RootState) => selectFieldsByFormId(state, formId));
   const fieldModal = useModalState(false);
-  const { addFieldToForm, deleteFieldFromForm } = useFieldManagement({ formId });
+  const { addFieldToForm, deleteFieldFromForm, reorderFormFields } = useFieldManagement({ formId });
 
   const validateFormValues = useCallback(
     (values: FormValues) => validateForm(values, allForms, isUpdateMode ? initialForm?.id : undefined),
@@ -145,6 +145,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       handleSubmit={handleSubmit}
       handleOpenFieldModal={fieldModal.open}
       handleDeleteField={deleteFieldFromForm}
+      reorderFormFields={reorderFormFields}
       submitError={submitError}
       isFieldModalOpen={fieldModal.isOpen}
       handleCloseFieldModal={fieldModal.close}

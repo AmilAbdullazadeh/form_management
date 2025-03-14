@@ -5,6 +5,7 @@ export interface FieldListProps {
     isViewOnly: boolean;
     onAddField: () => void;
     onDeleteField?: (fieldId: string) => void;
+    onReorderFields?: (reorderedFields: FormField[]) => void;
     addButtonLabel?: string;
     emptyMessage?: string;
 }

@@ -8,6 +8,10 @@ import { RootState } from '../store';
 
 export type FieldCreatePayload = Omit<FormField, 'id'>;
 export type FieldUpdatePayload = Partial<FormField> & { id: string };
+export type FieldsReorderPayload = {
+  formId: string;
+  fieldIds: string[];
+};
 
 export const fieldsSlice = createSlice({
   name: 'fields',
@@ -35,8 +39,23 @@ export const fieldsSlice = createSlice({
       state.fields = state.fields.filter((field) => field.id !== action.payload);
     },
     deleteFormFields: (state, action: PayloadAction<string>) => {
-      // Delete all fields associated with a form
       state.fields = state.fields.filter((field) => field.formId !== action.payload);
+    },
+    reorderFields: (state, action: PayloadAction<FieldsReorderPayload>) => {
+      const { formId, fieldIds } = action.payload;
+      
+      const formFields = state.fields.filter(field => field.formId === formId);
+      
+      const fieldMap = new Map(formFields.map(field => [field.id, field]));
+      
+      const orderedFields = fieldIds
+        .filter(id => fieldMap.has(id))
+        .map(id => fieldMap.get(id)!);
+      
+      state.fields = [
+        ...state.fields.filter(field => field.formId !== formId),
+        ...orderedFields
+      ];
     },
     setFieldsLoading: (state) => {
       state.status = 'loading';
@@ -58,6 +77,7 @@ export const {
   updateField, 
   deleteField,
   deleteFormFields,
+  reorderFields,
   setFieldsLoading,
   setFieldsError,
   setFieldsSuccess

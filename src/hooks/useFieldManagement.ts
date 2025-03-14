@@ -3,15 +3,14 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { addField, deleteField } from '@/lib/redux/slices/fieldsSlice';
+import { addField, deleteField, reorderFields } from '@/lib/redux/slices/fieldsSlice';
 import { AppDispatch } from '@/lib/redux/store';
-import { FieldFormValues } from '@/types/form';
+import { FieldFormValues, FormField } from '@/types/form';
 import { UseFieldManagementProps } from '@/types/hook';
 
 
 /**
- * Managing form fields (add, delete, etc.)
- * Encapsulates field-related operations to keep components cleaner
+ * Managing form fields (add, delete, reorder, etc.)
  */
 export const useFieldManagement = ({ formId }: UseFieldManagementProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -36,8 +35,14 @@ export const useFieldManagement = ({ formId }: UseFieldManagementProps) => {
     }
   }, [dispatch]);
 
+  const reorderFormFields = useCallback((fields: FormField[]) => {
+    const fieldIds = fields.map(field => field.id);
+    dispatch(reorderFields({ formId, fieldIds }));
+  }, [dispatch, formId]);
+
   return {
     addFieldToForm,
-    deleteFieldFromForm
+    deleteFieldFromForm,
+    reorderFormFields
   };
 }; 

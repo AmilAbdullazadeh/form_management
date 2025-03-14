@@ -91,7 +91,8 @@ export const FormContent = ({
   formFields, 
   handleOpenFieldModal,
   handleDeleteField,
-  submitError
+  submitError,
+  reorderFormFields
 }: FormModalContentProps) => {
   return (
     <>
@@ -136,6 +137,7 @@ export const FormContent = ({
         isViewOnly={isViewOnly}
         onAddField={handleOpenFieldModal}
         onDeleteField={handleDeleteField}
+        onReorderFields={reorderFormFields}
       />
       
       {submitError && (

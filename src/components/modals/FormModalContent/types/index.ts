@@ -11,6 +11,7 @@ export interface FormModalContentProps {
         handleOpenFieldModal: () => void;
         handleDeleteField?: (fieldId: string) => void;
         submitError: string | null;
+        reorderFormFields?: (fields: FormField[]) => void;
 }
 
 export interface FormModalRenderProps extends FormModalContentProps {

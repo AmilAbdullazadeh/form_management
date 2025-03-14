@@ -29,7 +29,8 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
   isFieldModalOpen,
   handleCloseFieldModal,
   handleSaveField,
-  formId
+  formId,
+  reorderFormFields
 }) => {
   // Modal title and submit button text based on mode
   const modalTitle = isViewOnly ? FORM_MODAL_TEXT[FormModalMode.VIEW].TITLE : FORM_MODAL_TEXT[mode].TITLE;
@@ -56,7 +57,7 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
       )}
     </>
   );
-  
+
   return (
     <Modal
       isOpen={isOpen}
@@ -75,6 +76,7 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
             handleOpenFieldModal={handleOpenFieldModal}
             handleDeleteField={handleDeleteField}
             submitError={submitError}
+            reorderFormFields={reorderFormFields}
           />
         </form>
       </div>
