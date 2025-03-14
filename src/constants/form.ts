@@ -80,34 +80,37 @@ export const FORM_EMPTY_STATES = {
 }; 
 
 /**
- * Form-related constants to avoid magic strings throughout the application
- * Using constants improves maintainability and prevents typos
+ * Constants for form properties
  */
-
-// Form properties
 export const FormProperties = {
-  IS_VISIBLE: 'isVisible',
-  IS_READ_ONLY: 'isReadOnly',
   TITLE: 'title',
-} as const;
+  IS_VISIBLE: 'isVisible',
+  IS_READ_ONLY: 'isReadOnly'
+};
 
-// Form states
+/**
+ * Constants for form states
+ */
 export const FormStates = {
   IDLE: 'idle',
   LOADING: 'loading',
   SUCCEEDED: 'succeeded',
-  FAILED: 'failed',
-} as const;
+  FAILED: 'failed'
+};
 
-// Form operations
+/**
+ * Constants for form operations
+ */
 export const FormOperations = {
   CREATING: 'creating',
   UPDATING: 'updating',
   DELETING: 'deleting',
-  VIEWING: 'viewing',
-} as const;
+  VIEWING: 'viewing'
+};
 
-// Field types
+/**
+ * Constants for field types
+ */
 export const FieldTypes = {
   TEXT: 'text',
   CHECKBOX: 'checkbox',
@@ -116,5 +119,5 @@ export const FieldTypes = {
   TEXTAREA: 'textarea',
   NUMBER: 'number',
   DATE: 'date',
-  EMAIL: 'email',
-} as const; 
+  EMAIL: 'email'
+}; 

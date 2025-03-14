@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FORM_SUBMIT_ERRORS } from '@/constants/form';
-import { FormOperations } from '@/constants/formConstants';
+import { FormOperations } from '@/constants/form';
 import { useForm } from '@/hooks/form/useForm';
 import { useFieldManagement } from '@/hooks/useFieldManagement';
 import { useFormMode } from '@/hooks/useFormMode';
