@@ -1,0 +1,23 @@
+@import '@/styles/variables/spacing';
+@import '@/styles/mixins/responsive';
+
+.formCardList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: $spacing-md;
+
+  @include media-breakpoint-down(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.emptyState {
+  text-align: center;
+  padding: $spacing-xl 0;
+  color: #6c757d;
+  font-size: 1.1rem;
+
+  p {
+    margin: 0;
+  }
+}

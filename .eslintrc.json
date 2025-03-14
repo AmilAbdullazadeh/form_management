@@ -1,0 +1,16 @@
+{
+  "extends": ["next/core-web-vitals", "eslint:recommended"],
+  "plugins": ["import"],
+  "rules": {
+    "max-lines": ["error", 250],
+    "no-console": ["error", { "allow": ["error", "warn", "info"] }],
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always",
+        "alphabetize": { "order": "asc", "caseInsensitive": true }
+      }
+    ]
+  }
+}

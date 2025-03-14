@@ -1,0 +1,71 @@
+:root {
+  /* Brand colors */
+  --primary-color: #3498db;
+  --primary-color-dark: #2980b9;
+  --secondary-color: #7f8c8d;
+  --secondary-color-dark: #6c7a7a;
+  --success-color: #2ecc71;
+  --success-color-dark: #27ae60;
+  --danger-color: #e74c3c;
+  --danger-color-dark: #c0392b;
+  --warning-color: #f39c12;
+  --warning-color-dark: #d35400;
+  --info-color: #1abc9c;
+  --info-color-dark: #16a085;
+
+  /* Neutral colors */
+  --white: #ffffff;
+  --black: #000000;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* UI properties */
+  --border-radius: 4px;
+  --border-radius-lg: 8px;
+  --border-radius-sm: 2px;
+  --border-color: var(--gray-300);
+  --background-color: var(--gray-100);
+  --text-color: var(--gray-900);
+
+  /* Spacing */
+  --spacing-unit: 0.25rem;
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-xxl: 3rem;
+
+  /* Typography */
+  --font-family-base:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+    'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-family-monospace:
+    SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-tight: 1.25;
+  --line-height-base: 1.5;
+  --line-height-loose: 1.75;
+}

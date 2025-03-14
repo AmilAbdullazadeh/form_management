@@ -1,0 +1,64 @@
+// Skeleton animation
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+// Base skeleton class
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 25%,
+    rgba(0, 0, 0, 0.1) 37%,
+    rgba(0, 0, 0, 0.06) 63%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+  display: block;
+}
+
+// Text skeleton
+.skeleton-text {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+// Text skeleton sizes
+.skeleton-text-sm {
+  width: 30%;
+}
+
+.skeleton-text-md {
+  width: 60%;
+}
+
+.skeleton-text-lg {
+  width: 90%;
+}
+
+// Title skeleton
+.skeleton-title {
+  height: 24px;
+  width: 70%;
+  margin-bottom: 16px;
+}
+
+// Card skeleton
+.skeleton-card {
+  height: 120px;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+// Circle skeleton
+.skeleton-circle {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+}

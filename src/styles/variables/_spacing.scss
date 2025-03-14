@@ -1,0 +1,21 @@
+// Base spacing unit
+$spacing-unit: 0.25rem;
+
+// Spacing scale
+$spacing-xs: $spacing-unit;
+$spacing-sm: $spacing-unit * 2;
+$spacing-md: $spacing-unit * 4;
+$spacing-lg: $spacing-unit * 6;
+$spacing-xl: $spacing-unit * 8;
+$spacing-xxl: $spacing-unit * 12;
+
+// CSS variables map for reference (not applied directly)
+$spacing-vars: (
+  --spacing-unit: $spacing-unit,
+  --spacing-xs: $spacing-xs,
+  --spacing-sm: $spacing-sm,
+  --spacing-md: $spacing-md,
+  --spacing-lg: $spacing-lg,
+  --spacing-xl: $spacing-xl,
+  --spacing-xxl: $spacing-xxl,
+);

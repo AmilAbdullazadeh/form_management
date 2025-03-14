@@ -1,0 +1,32 @@
+.checkboxGroup {
+  margin-bottom: 1rem;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 0.5rem;
+
+  &.error {
+    border-color: var(--danger-color);
+  }
+}
+
+.label {
+  margin-bottom: 0;
+}
+
+.errorText {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: var(--danger-color);
+}
+
+.helperText {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #6c757d;
+}
