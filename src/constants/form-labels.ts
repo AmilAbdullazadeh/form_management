@@ -6,7 +6,14 @@
 export const FORM_FIELD_LABELS = {
   FORM_NAME: 'Form Name',
   VISIBLE: 'Visible',
-  READ_ONLY: 'Read Only'
+  READ_ONLY: 'Read Only',
+  LABEL: 'Field Label'
+};
+
+// Form field validation errors
+export const FORM_FIELD_VALIDATION_ERRORS = {
+  LABEL_REQUIRED: 'Field label is required',
+  OPTIONS_REQUIRED: 'Options are required for dropdown and radio fields'
 };
 
 // Form field placeholders

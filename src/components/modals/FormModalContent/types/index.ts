@@ -1,13 +1,33 @@
-import { FormValues } from "@/types/form";
+import { FormEvent, ChangeEvent } from "react";
 
+import { FieldFormValues, FormField, FormModalMode, FormValues } from "@/types/form";
+
+/**
+ * Props for the FormContent component
+ */
 export interface FormModalContentProps {
         values: FormValues;
         errors: Record<string, string>;
-        handleChange: any;
+        handleChange: (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void;
         isViewOnly: boolean;
-        formFields: any[];
-        isUpdateMode: boolean;
-        initialForm: any;
+        formFields: FormField[];
         handleOpenFieldModal: () => void;
+        handleDeleteField?: (fieldId: string) => void;
         submitError: string | null;
+}
+
+/**
+ * Props for the FormModalRenderer component
+ * Extends FormModalContentProps with additional properties needed for the modal
+ */
+export interface FormModalRenderProps extends FormModalContentProps {
+        isOpen: boolean;
+        onClose: () => void;
+        mode: FormModalMode;
+        isSubmitting: boolean;
+        handleSubmit: (e: FormEvent) => void;
+        isFieldModalOpen: boolean;
+        handleCloseFieldModal: () => void;
+        handleSaveField: (field: FieldFormValues) => void;
+        formId: string;
 }

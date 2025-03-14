@@ -1,23 +1,24 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Button } from '@/components/common/Button';
-import { Modal } from '@/components/common/Modal';
-import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS } from '@/constants/form';
-import { useForm } from '@/hooks/useForm';
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { addField, selectFieldsByFormId } from '@/lib/redux/slices/fieldsSlice';
+import { FORM_SUBMIT_ERRORS } from '@/constants/form';
+import { FormOperations } from '@/constants/formConstants';
+import { useForm } from '@/hooks/form/useForm';
+import { useFieldManagement } from '@/hooks/useFieldManagement';
+import { useFormMode } from '@/hooks/useFormMode';
+import { useModalState } from '@/hooks/useModalState';
+import { useAppSelector } from '@/lib/redux/hooks';
+import { selectFieldsByFormId } from '@/lib/redux/slices/fieldsSlice';
 import { addForm, selectAllForms, updateForm } from '@/lib/redux/slices/formsSlice';
-import { FieldFormValues, FormModalMode, FormModalProps, FormValues } from '@/types/form';
+import { AppDispatch, RootState } from '@/lib/redux/store';
+import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
 import { extractFormValues, prepareFormData } from '@/utils/form';
+import { FormIdManager } from '@/utils/formIdManager';
 import { validateForm } from '@/utils/validation';
 
-import { FieldModal } from '../FieldModal/FieldModal';
-import { FormContent } from '../FormModalContent/FormModalContent';
-
-import styles from './FormModal.module.scss';
-
+import { FormModalRenderer } from '../FormModalContent/FormModalRenderer';
 
 // Default empty form values
 const DEFAULT_FORM_VALUES: FormValues = {
@@ -36,26 +37,22 @@ export const FormModal: React.FC<FormModalProps> = ({
   mode = FormModalMode.CREATE,
   initialForm = {}
 }) => {
-  const dispatch = useAppDispatch();
-  const isUpdateMode = mode === FormModalMode.UPDATE;
-  const [submitError, setSubmitError] = useState<string | null>(null);
+  const dispatch = useDispatch<AppDispatch>();
+  
+  // Create a temporary ID for new forms in create mode
+  const tempFormIdRef = useRef<string>(FormIdManager.generateId());
+  
+  // Track previous mode and form ID for change detection
   const prevMode = useRef<FormModalMode>(mode);
   const prevFormId = useRef<string | undefined>(initialForm?.id);
   
-  // Field modal state
-  const [isFieldModalOpen, setIsFieldModalOpen] = useState(false);
+  // Get form error state
+  const [submitError, setSubmitError] = useState<string | null>(null);
   
   // Get all existing forms for uniqueness validation
   const allForms = useAppSelector(selectAllForms);
   
-  // Get fields for this form if in update mode
-  const formFields = useAppSelector(state => 
-    isUpdateMode && initialForm?.id 
-      ? selectFieldsByFormId(state, initialForm.id) 
-      : []
-  );
-  
-  // Extract initial values from the form once using useMemo to prevent recreation on every render
+  // Extract initial values from the form
   const initialValues = useMemo(() => {
     // For create mode or if no initialForm, return default empty values
     if (mode === FormModalMode.CREATE || !initialForm?.id) {
@@ -65,10 +62,22 @@ export const FormModal: React.FC<FormModalProps> = ({
     return extractFormValues(initialForm);
   }, [mode, initialForm?.id]);
   
-  // Check if the form is in view-only mode (either VIEW mode or readonly form in UPDATE mode)
-  const isViewOnly = mode === FormModalMode.VIEW || (isUpdateMode && initialValues.isReadOnly);
+  // Get form mode information
+  const { isUpdateMode, isViewOnly } = useFormMode({ mode, initialValues });
+  
+  // Get fields for this form
+  const formFields = useSelector((state: RootState) => 
+    selectFieldsByFormId(state, isUpdateMode && initialForm?.id ? initialForm.id : tempFormIdRef.current)
+  );
+  
+  // Manage field modal state
+  const fieldModal = useModalState(false);
+  
+  // Get field management functions
+  const formId = isUpdateMode && initialForm?.id ? initialForm.id : tempFormIdRef.current;
+  const { addFieldToForm, deleteFieldFromForm } = useFieldManagement({ formId });
 
-  // Form validation function that uses the utility
+  // Form validation function
   const validateFormValues = useCallback((values: FormValues) => {
     return validateForm(values, allForms, isUpdateMode ? initialForm?.id : undefined);
   }, [allForms, isUpdateMode, initialForm?.id]);
@@ -83,23 +92,28 @@ export const FormModal: React.FC<FormModalProps> = ({
       
       if (isUpdateMode && initialForm?.id) {
         // Update existing form
-        dispatch(updateForm({
+        await dispatch(updateForm({
           id: initialForm.id,
           ...formData
         }));
       } else {
         // Create new form
-        dispatch(addForm(formData));
+        await dispatch(addForm(formData));
+        // Generate a new ID for the form fields
+        const newFormId = FormIdManager.generateId();
+        
+        // Save any fields that were added during form creation
+        FormIdManager.saveFieldsForNewForm(dispatch, tempFormIdRef.current, formFields, newFormId);
       }
       
       // Close modal
       onClose();
     } catch (error) {
-      console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
+      console.error(`Error ${isUpdateMode ? FormOperations.UPDATING : FormOperations.CREATING} form:`, error);
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
       throw error; // Let the form hook handle the error
     }
-  }, [isUpdateMode, initialForm?.id, dispatch, onClose]);
+  }, [isUpdateMode, initialForm?.id, dispatch, onClose, formFields]);
   
   // Initialize form with useForm hook
   const {
@@ -120,37 +134,16 @@ export const FormModal: React.FC<FormModalProps> = ({
   const handleModalClose = useCallback(() => {
     setSubmitError(null);
     resetForm();
-    onClose();
-  }, [onClose, resetForm]);
-  
-  // Handle opening the field modal
-  const handleOpenFieldModal = useCallback(() => {
-    setIsFieldModalOpen(true);
-  }, []);
-
-  // Handle closing the field modal
-  const handleCloseFieldModal = useCallback(() => {
-    setIsFieldModalOpen(false);
-  }, []);
-
-  // Handle saving a new field
-  const handleSaveField = useCallback((fieldValues: FieldFormValues) => {
-    if (isUpdateMode && initialForm?.id) {
-      // Process options string into array if needed
-      const options = fieldValues.options?.split(',').map(opt => opt.trim()).filter(Boolean);
-      
-      // Add the field to the form
-      dispatch(addField({
-        formId: initialForm.id,
-        type: fieldValues.type,
-        label: fieldValues.label,
-        placeholder: fieldValues.placeholder,
-        required: fieldValues.required,
-        options: options,
-        defaultValue: fieldValues.defaultValue
-      }));
+    
+    // Clean up temporary fields if in create mode
+    if (!isUpdateMode) {
+      FormIdManager.cleanupTemporaryFields(dispatch, tempFormIdRef.current);
+      // Generate a new temporary ID for next time
+      tempFormIdRef.current = FormIdManager.generateId();
     }
-  }, [dispatch, isUpdateMode, initialForm?.id]);
+    
+    onClose();
+  }, [onClose, resetForm, isUpdateMode, dispatch]);
   
   // Reset form when modal opens/closes or mode changes
   useEffect(() => {
@@ -171,69 +164,35 @@ export const FormModal: React.FC<FormModalProps> = ({
       
       if (mode === FormModalMode.CREATE) {
         setValues({ ...DEFAULT_FORM_VALUES });
-      } else if (mode === FormModalMode.UPDATE && initialForm?.id) {
-        setValues(extractFormValues(initialForm));
+        // Generate a new temporary ID for create mode
+        tempFormIdRef.current = FormIdManager.generateId();
+      } else if (mode === FormModalMode.UPDATE || mode === FormModalMode.VIEW) {
+        // For both update and view modes, extract values from the form
+        const formValues = extractFormValues(initialForm);
+        setValues(formValues);
       }
     }
   }, [isOpen, mode, initialForm?.id, setValues, resetForm]);
   
-  // Modal title and submit button text based on mode
-  const modalTitle = isViewOnly ? FORM_MODAL_TEXT[FormModalMode.VIEW].TITLE : FORM_MODAL_TEXT[mode].TITLE;
-  const submitButtonText = FORM_MODAL_TEXT[mode].SUBMIT_BUTTON;
-  
-  // Modal footer with action buttons - hide submit button in view-only mode
-  const modalFooter = (
-    <>
-      <Button 
-        variant="outline" 
-        onClick={handleModalClose} 
-        disabled={isSubmitting}
-      >
-        {isViewOnly ? 'Close' : FORM_MODAL_TEXT.CANCEL_BUTTON}
-      </Button>
-      {!isViewOnly && (
-        <Button 
-          type="submit"
-          form="form-modal"
-          isLoading={isSubmitting}
-        >
-          {submitButtonText}
-        </Button>
-      )}
-    </>
-  );
-  
   return (
-    <Modal
+    <FormModalRenderer 
       isOpen={isOpen}
       onClose={handleModalClose}
-      title={modalTitle}
-      footer={modalFooter}
-    >
-      <div className={`${styles.formContainer} ${isViewOnly ? styles.readOnlyForm : ''}`}>
-        <form id="form-modal" onSubmit={handleSubmit} noValidate>
-          <FormContent 
-            values={values}
-            errors={errors}
-            handleChange={handleChange}
-            isViewOnly={isViewOnly}
-            formFields={formFields}
-            isUpdateMode={isUpdateMode}
-            initialForm={initialForm}
-            handleOpenFieldModal={handleOpenFieldModal}
-            submitError={submitError}
-          />
-        </form>
-      </div>
-      
-      {/* Field Modal */}
-      {isUpdateMode && initialForm?.id && (
-        <FieldModal
-          isOpen={isFieldModalOpen}
-          onClose={handleCloseFieldModal}
-          onSave={handleSaveField}
-        />
-      )}
-    </Modal>
+      mode={mode}
+      isViewOnly={isViewOnly}
+      isSubmitting={isSubmitting}
+      values={values}
+      errors={errors}
+      formFields={formFields}
+      handleChange={handleChange}
+      handleSubmit={handleSubmit}
+      handleOpenFieldModal={fieldModal.open}
+      handleDeleteField={deleteFieldFromForm}
+      submitError={submitError}
+      isFieldModalOpen={fieldModal.isOpen}
+      handleCloseFieldModal={fieldModal.close}
+      handleSaveField={addFieldToForm}
+      formId={formId}
+    />
   );
 }; 

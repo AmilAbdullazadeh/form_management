@@ -1,68 +1,95 @@
-  .fieldsSection {
-    margin-top: 2rem;
-    margin-bottom: 1.5rem;
-    border-top: 1px solid #e5e7eb;
-    padding-top: 1rem;
-  }
-  
-  .fieldsSectionHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    
-    h3 {
-      margin: 0;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-  }
-  
-  .fieldsList {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-  
-  .fieldItem {
-    padding: 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.375rem;
-    background-color: #f9fafb;
-  }
-  
-  .fieldInfo {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  
-  .fieldLabel {
-    font-weight: 500;
-    flex-grow: 1;
-  }
-  
-  .fieldType {
-    font-size: 0.875rem;
-    color: #6b7280;
-    padding: 0.25rem 0.5rem;
-    background-color: #f3f4f6;
-    border-radius: 0.25rem;
-  }
-  
-  .fieldRequired {
-    font-size: 0.75rem;
-    color: #ef4444;
-    padding: 0.125rem 0.375rem;
-    background-color: #fee2e2;
-    border-radius: 0.25rem;
-  }
-  
-  .noFields {
-    padding: 1.5rem;
-    text-align: center;
-    color: #6b7280;
-    background-color: #f9fafb;
-    border: 1px dashed #e5e7eb;
-    border-radius: 0.375rem;
-  } 
+.formContainer {
+  padding: 1rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.checkboxGroup {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.submitError {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.readOnlyForm {
+  opacity: 0.9;
+}
+
+.fieldsSection {
+  margin-top: 2rem;
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}
+
+.fieldsSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.fieldsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+}
+
+.fieldInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  font-weight: 500;
+}
+
+.fieldType {
+  font-size: 0.75rem;
+  color: #6c757d;
+  padding: 0.25rem 0.5rem;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+
+.fieldRequired {
+  font-size: 0.75rem;
+  color: #dc3545;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 0.25rem;
+}
+
+.noFields {
+  text-align: center;
+  padding: 1rem;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border: 1px dashed #ced4da;
+  border-radius: 0.25rem;
+}
+
+.deleteButton {
+  min-width: auto;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+} 

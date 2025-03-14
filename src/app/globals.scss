@@ -1,4 +1,3 @@
-// Import main SCSS file with variables, mixins, and utilities
 @import '../styles/main';
 
 * {
@@ -11,8 +10,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: var(--font-family);
   background-color: var(--background-color);
   color: var(--text-color);
 }

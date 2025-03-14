@@ -6,16 +6,7 @@ import { Button } from '@/components/common';
 
 import { useModal } from '../ModalContent/ModalContext';
 
-// Generic form modal props
-interface FormModalProps {
-  title: string;
-  formContent: ReactNode;
-  onSubmit: () => Promise<void>;
-  submitLabel?: string;
-  cancelLabel?: string;
-  size?: 'sm' | 'md' | 'lg';
-  isSubmitting?: boolean;
-}
+import { FormModalProps } from './types';
 
 /**
  * Opens a generic form modal

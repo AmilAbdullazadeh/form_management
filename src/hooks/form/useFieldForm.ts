@@ -3,6 +3,7 @@
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 
 import { FieldFormValues, FieldType } from '@/types/form';
+import { FORM_FIELD_VALIDATION_ERRORS } from '@/constants/form-labels';
 
 // Default field values
 export const DEFAULT_FIELD_VALUES: FieldFormValues = {
@@ -15,16 +16,16 @@ export const DEFAULT_FIELD_VALUES: FieldFormValues = {
 };
 
 interface UseFieldFormProps {
-  /* eslint-disable */
   onSave: (field: FieldFormValues) => Promise<void> | void;
-  /* eslint-enable */
   onClose: () => void;
+  formId?: string;
 }
 
 /**
  * Custom hook for managing field form state, validation, and submission
  */
-export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
+// eslint-disable-next-line no-unused-vars
+export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => {
   // State for field values
   const [values, setValues] = useState<FieldFormValues>(DEFAULT_FIELD_VALUES);
   const [errors, setErrors] = useState<Partial<Record<keyof FieldFormValues, string>>>({});
@@ -52,12 +53,12 @@ export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
     const newErrors: Partial<Record<keyof FieldFormValues, string>> = {};
     
     if (!values.label.trim()) {
-      newErrors.label = 'Field label is required';
+      newErrors.label = FORM_FIELD_VALIDATION_ERRORS.LABEL_REQUIRED;
     }
     
     // For dropdown and radio, options are required
     if ((values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO) && !values.options?.trim()) {
-      newErrors.options = 'Options are required for dropdown and radio fields';
+      newErrors.options = FORM_FIELD_VALIDATION_ERRORS.OPTIONS_REQUIRED;
     }
     
     setErrors(newErrors);

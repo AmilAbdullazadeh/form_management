@@ -1,10 +1,7 @@
 import React from 'react';
 
 import styles from './ErrorMessage.module.scss';
-
-interface ErrorMessageProps {
-  message: string;
-}
+import { ErrorMessageProps } from './types';
 
 /**
  * ErrorMessage component for displaying form validation errors

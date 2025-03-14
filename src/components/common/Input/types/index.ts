@@ -4,5 +4,5 @@ export interface InputConfig {
     fullWidth?: boolean;
     className?: string;
     containerClassName?: string;
-  }
+}
   

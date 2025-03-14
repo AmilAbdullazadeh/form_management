@@ -2,15 +2,7 @@
 
 import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 
-// Define simplified types to avoid linter errors
-type FormSubmitFn<T> = (arg0: T) => Promise<void> | void;
-type FormValidateFn<T> = (arg0: T) => Partial<Record<keyof T, string>>;
-
-interface UseFormProps<T> {
-  initialValues: T;
-  onSubmit: (formData: T) => Promise<void> | void;
-  validate?: (formData: T) => Partial<Record<keyof T, string>>;
-}
+import { UseFormProps } from '@/types/hook';
 
 /**
  * Custom hook for managing form state, validation, and submission

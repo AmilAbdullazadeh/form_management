@@ -2,11 +2,8 @@ import React from 'react';
 
 import { Skeleton } from '../Skeleton';
 
-interface SkeletonCardProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
+import styles from './SkeletonCard.module.scss';
+import { SkeletonCardProps } from './types';
 /**
  * SkeletonCard component for form card loading states
  * Displays a skeleton version of a form card with title, description, and action button
@@ -17,7 +14,7 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '', styl
       <Skeleton type="title" />
       <Skeleton type="text" size="lg" />
       <Skeleton type="text" />
-      <div style={{ marginTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+      <div className={styles.action}>
         <Skeleton type="text" size="sm" />
       </div>
     </div>

@@ -8,7 +8,7 @@ import { ErrorMessage } from '@/components/common/ErrorMessage';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form';
-import { useForm } from '@/hooks/useForm';
+import { useForm } from '@/hooks/form/useForm';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { addForm, selectAllForms, updateForm } from '@/lib/redux/slices/formsSlice';
 import { FormModalMode, FormModalProps, FormValues } from '@/types/form';

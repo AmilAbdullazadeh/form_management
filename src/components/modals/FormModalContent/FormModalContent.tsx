@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from '@/components/common/Button';
 import { Checkbox } from '@/components/common/Checkbox';
 import { ErrorMessage } from '@/components/common/ErrorMessage';
+import { FieldList } from '@/components/common/FieldList';
 import { Input } from '@/components/common/Input';
 import { FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form-labels';
 
@@ -14,11 +15,31 @@ import { FormModalContentProps } from './types';
 /**
  * Form Fields List component to display fields in the form
  */
-export const FormFieldsList = ({ fields, isViewOnly, onAddField }: { 
+export const FormFieldsList = ({ 
+  fields, 
+  isViewOnly, 
+  onAddField,
+  onDeleteField 
+}: { 
   fields: any[]; 
   isViewOnly: boolean;
   onAddField: () => void;
+  onDeleteField?: (fieldId: string) => void;
 }) => {
+  // Prevent form submission when clicking the Add Field button
+  const handleAddFieldClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent form submission
+    onAddField();
+  };
+
+  // Handle delete field button click
+  const handleDeleteField = (e: React.MouseEvent, fieldId: string) => {
+    e.preventDefault(); // Prevent form submission
+    if (onDeleteField) {
+      onDeleteField(fieldId);
+    }
+  };
+
   return (
     <div className={styles.fieldsSection}>
       <div className={styles.fieldsSectionHeader}>
@@ -26,8 +47,9 @@ export const FormFieldsList = ({ fields, isViewOnly, onAddField }: {
         <Button
           variant="primary"
           size="sm"
-          onClick={onAddField}
+          onClick={handleAddFieldClick}
           disabled={isViewOnly}
+          type="button"
         >
           Add Field
         </Button>
@@ -42,6 +64,17 @@ export const FormFieldsList = ({ fields, isViewOnly, onAddField }: {
                 <span className={styles.fieldType}>{field.type}</span>
                 {field.required && <span className={styles.fieldRequired}>Required</span>}
               </div>
+              {!isViewOnly && onDeleteField && (
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={(e) => handleDeleteField(e, field.id)}
+                  type="button"
+                  className={styles.deleteButton}
+                >
+                  Delete
+                </Button>
+              )}
             </div>
           ))}
         </div>
@@ -63,9 +96,8 @@ export const FormContent = ({
   handleChange, 
   isViewOnly, 
   formFields, 
-  isUpdateMode, 
-  initialForm, 
   handleOpenFieldModal,
+  handleDeleteField,
   submitError
 }: FormModalContentProps) => {
   return (
@@ -106,13 +138,12 @@ export const FormContent = ({
         />
       </div>
       
-      {isUpdateMode && initialForm?.id && (
-        <FormFieldsList 
-          fields={formFields}
-          isViewOnly={isViewOnly}
-          onAddField={handleOpenFieldModal}
-        />
-      )}
+      <FieldList 
+        fields={formFields}
+        isViewOnly={isViewOnly}
+        onAddField={handleOpenFieldModal}
+        onDeleteField={handleDeleteField}
+      />
       
       {submitError && (
         <div className={styles.submitError}>
