@@ -1,5 +1,7 @@
+@import '../../../styles/index';
+
 .formGroup {
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
   
   &.full {
     width: 100%;
@@ -8,34 +10,34 @@
 
 .label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  margin-bottom: $spacing-xs;
+  font-weight: $font-weight-medium;
 }
 
 .input {
   display: block;
   width: 100%;
-  padding: 0.5rem;
-  font-size: 1rem;
+  padding: $spacing-sm;
+  font-size: $font-size-base;
   line-height: 1.5;
-  color: var(--text-color);
-  background-color: #fff;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
+  color: $gray-900;
+  background-color: $white;
+  border: 1px solid $gray-300;
+  border-radius: $border-radius-sm;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   
   &:focus {
-    border-color: var(--primary-color);
+    border-color: $primary;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
   }
   
   &.error {
-    border-color: #dc2626;
-    background-color: rgba(220, 38, 38, 0.05);
+    border-color: $danger;
+    background-color: rgba($danger, 0.05);
     
     &:focus {
-      box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+      box-shadow: 0 0 0 0.2rem rgba($danger, 0.25);
     }
   }
   
@@ -45,13 +47,13 @@
 }
 
 .errorText {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: #dc2626;
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $danger;
 }
 
 .helperText {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: #6c757d;
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $gray-600;
 } 

@@ -5,8 +5,7 @@ import React from 'react';
 import { ModalProvider } from '@/components/common';
 import { Providers } from '@/lib/redux/provider';
 
-import '@/styles/variables.css';
-import '@/styles/globals.css';
+import '@/styles/main.scss';
 import './globals.scss';
 
 const inter = Inter({ subsets: ['latin'] });

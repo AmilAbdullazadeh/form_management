@@ -10,7 +10,7 @@ export const isFormNameUnique = (name: string, forms: Form[], currentFormId?: st
   !forms.some(form => form.title === name && !(currentFormId && currentFormId === form.id));
 
 /**
- * Validates a form against all rules
+ * Validates a form all rules
 */
 export const validateForm = (
   values: FormValues, 

@@ -5,4 +5,15 @@
 @import './mixins/index';
 
 // Import utilities
-@import './utils/index'; 
+@import './utils/index';
+
+@import 'variables/colors';
+@import 'variables/spacing';
+@import 'variables/typography';
+@import 'variables/breakpoints';
+
+@import 'mixins/flexbox';
+@import 'mixins/responsive';
+@import 'mixins/typography';
+
+@import 'globals'; 
