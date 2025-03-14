@@ -35,7 +35,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  // Generate button classes based on props
+  // Generate button classes based on props, if props.disabled is true, the button will be disabled
   const getButtonClasses = () => {
     const classes = [styles.button];
 
@@ -53,6 +53,11 @@ export const Button: React.FC<ButtonProps> = ({
     // Add loading class if needed
     if (isLoading) {
       classes.push(styles.loading);
+    }
+
+    // Add disabled class if needed
+    if (props.disabled) {
+      classes.push(styles.disabled);
     }
 
     // Add custom class if provided

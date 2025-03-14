@@ -4,7 +4,7 @@ import React, { ReactNode } from 'react';
 
 import { Button } from '@/components/common';
 
-import { useModal } from './ModalContext';
+import { useModal } from '../ModalContent/ModalContext';
 
 // Generic form modal props
 interface FormModalProps {

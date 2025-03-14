@@ -1,0 +1,51 @@
+.formGroup {
+  margin-bottom: 1rem;
+  
+  &.full {
+    width: 100%;
+  }
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.select {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: #fff;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:focus {
+    border-color: var(--primary-color);
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  &.error {
+    border-color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.05);
+    
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba(220, 38, 38, 0.25);
+    }
+  }
+  
+  &.full {
+    width: 100%;
+  }
+}
+
+.errorText {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #dc2626;
+} 

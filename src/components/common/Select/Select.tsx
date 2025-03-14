@@ -1,28 +1,29 @@
-import React, { InputHTMLAttributes, forwardRef } from 'react';
+import React, { SelectHTMLAttributes, forwardRef } from 'react';
 
 import { ErrorMessage } from '@/components/common/ErrorMessage';
 
-import styles from './Input.module.scss';
-import { InputConfig } from './types';
+import styles from './Select.module.scss';
+import { SelectConfig } from './types';
 
-// Extend HTML input props with our configuration
-export type InputProps = InputHTMLAttributes<HTMLInputElement> & InputConfig;
+// Extend HTML select props with our configuration
+export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & SelectConfig;
 
 /**
- * Reusable Input component with simplified props
+ * Reusable Select component with simplified props
  */
-export const Input = forwardRef<HTMLInputElement, InputProps>(
+export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ 
     label, 
     error, 
     fullWidth = false, 
     className = '', 
     containerClassName = '',
+    options = [],
     ...props 
   }, ref) => {
-    // Generate input classes based on props
-    const getInputClasses = () => {
-      const classes = [styles.input];
+    // Generate select classes based on props
+    const getSelectClasses = () => {
+      const classes = [styles.select];
       
       // Add error class if needed
       if (error) {
@@ -66,12 +67,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {label}
           </label>
         )}
-        <input
+        <select
           ref={ref}
-          className={getInputClasses()}
+          className={getSelectClasses()}
           aria-invalid={error ? 'true' : 'false'}
           {...props}
-        />
+        >
+          <option value="">Select an option</option>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
         {error && <ErrorMessage message={error} />}
       </div>
     );
@@ -79,5 +87,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 );
 
 // Add display name for React DevTools
-Input.displayName = 'Input';
- 
+Select.displayName = 'Select'; 
