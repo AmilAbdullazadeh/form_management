@@ -3,27 +3,21 @@
 import { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { addField, deleteField } from '@/lib/redux/slices/fieldsSlice';
+import { addField, deleteField, reorderFields } from '@/lib/redux/slices/fieldsSlice';
 import { AppDispatch } from '@/lib/redux/store';
-import { FieldFormValues } from '@/types/form';
+import { FieldFormValues, FormField } from '@/types/form';
 import { UseFieldManagementProps } from '@/types/hook';
 
 
 /**
- * Custom hook for managing form fields (add, delete, etc.)
- * Encapsulates field-related operations to keep components cleaner
+ * Managing form fields (add, delete, reorder, etc.)
  */
 export const useFieldManagement = ({ formId }: UseFieldManagementProps) => {
   const dispatch = useDispatch<AppDispatch>();
 
-  /**
-   * Add a new field to the form
-   */
   const addFieldToForm = useCallback((fieldValues: FieldFormValues) => {
-    // Process options string into array if needed
     const options = fieldValues.options?.split(',').map(opt => opt.trim()).filter(Boolean);
     
-    // Add the field to the form
     dispatch(addField({
       formId,
       type: fieldValues.type,
@@ -35,17 +29,20 @@ export const useFieldManagement = ({ formId }: UseFieldManagementProps) => {
     }));
   }, [dispatch, formId]);
 
-  /**
-   * Delete a field from the form
-   */
   const deleteFieldFromForm = useCallback((fieldId: string) => {
     if (fieldId) {
       dispatch(deleteField(fieldId));
     }
   }, [dispatch]);
 
+  const reorderFormFields = useCallback((fields: FormField[]) => {
+    const fieldIds = fields.map(field => field.id);
+    dispatch(reorderFields({ formId, fieldIds }));
+  }, [dispatch, formId]);
+
   return {
     addFieldToForm,
-    deleteFieldFromForm
+    deleteFieldFromForm,
+    reorderFormFields
   };
 }; 

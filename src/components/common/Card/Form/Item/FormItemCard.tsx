@@ -10,9 +10,6 @@ import { parseDescriptionProperty } from '@/utils/form';
 import styles from './FormItemCard.module.scss';
 import { FormItemCardProps } from './types';
 
-/**
- * FormItemCard component for displaying form items
- */
 export const FormItemCard: React.FC<FormItemCardProps> = ({
   form,
   onEdit,
@@ -21,11 +18,10 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
 }) => {
   const { title, description, fields, submissions } = form;
   
-  // Determine visibility and readonly statuses using parseDescriptionProperty
   const isFormVisible = parseDescriptionProperty(description || '', 'isVisible');
   const isFormReadOnly = parseDescriptionProperty(description || '', 'isReadOnly');
 
-  // Helper function to get badge data based on type
+  // Get badge data based on type
   const getBadge = (type: 'visible' | 'readonly'): { text: string, variant: BadgeVariant } => {
     if (type === 'visible') {
       return {
@@ -40,18 +36,26 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
     }
   };
   
-  // Handle edit
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onEdit) onEdit(form.id);
   };
   
-  // Handle delete
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onDelete) onDelete(form.id);
   };
-  
+
+  const fieldCountDisplay = fields !== undefined ? {
+    icon: <span className={styles.fieldIcon}>📋</span>,
+    text: `${fields} ${fields === 1 ? 'field' : 'fields'}`
+  } : null;
+
+  const submissionsCountDisplay = submissions !== undefined ? {
+    icon: <span className={styles.submissionIcon}>📝</span>,
+    text: `${submissions} ${submissions === 1 ? 'submission' : 'submissions'}`
+  } : null;
+
   return (
     <FormCard
       title={title}
@@ -59,10 +63,10 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
         getBadge('visible'),
         getBadge('readonly')
       ]}
-      className={`${className} ${!isFormVisible ? styles.disabled : ''} ${isFormReadOnly ? styles.readonly : ''}`}
+      className={`${className} ${!isFormVisible ? styles.disabled : ''} ${isFormReadOnly ? styles.readOnly : ''}`}
       metadata={[
-        ...(fields !== undefined ? [{ text: `${fields} fields` }] : []),
-        ...(submissions !== undefined ? [{ text: `${submissions} submissions` }] : [])
+        ...(fieldCountDisplay ? [fieldCountDisplay] : []),
+        ...(submissionsCountDisplay ? [submissionsCountDisplay] : [])
       ]}
       actions={
         <>

@@ -1,70 +1,72 @@
+@import '../../../styles/index';
+
 .button {
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius);
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: $font-size-base;
   transition: all 0.2s ease;
 
   &.primary {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: $primary;
+    color: $white;
 
     &:hover {
-      background-color: var(--primary-color-dark);
+      background-color: darken($primary, 10%);
     }
   }
 
   &.secondary {
-    background-color: #6c757d;
-    color: white;
+    background-color: $gray-600;
+    color: $white;
 
     &:hover {
-      background-color: #5a6268;
+      background-color: darken($gray-600, 10%);
     }
   }
 
   &.danger {
-    background-color: var(--danger-color);
-    color: white;
+    background-color: $danger;
+    color: $white;
 
     &:hover {
-      background-color: var(--danger-color-dark);
+      background-color: darken($danger, 10%);
     }
   }
 
   &.success {
-    background-color: var(--success-color);
-    color: white;
+    background-color: $success;
+    color: $white;
 
     &:hover {
-      background-color: var(--success-color-dark);
+      background-color: darken($success, 10%);
     }
   }
 
   &.outline {
     background-color: transparent;
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
+    border: 1px solid $gray-300;
+    color: $gray-900;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.05);
+      background-color: rgba($black, 0.05);
     }
   }
 
   &.sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-sm;
   }
 
   &.md {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-base;
   }
 
   &.lg {
-    padding: 0.75rem 1.5rem;
-    font-size: 1.25rem;
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-lg;
   }
 
   &.full {
@@ -88,15 +90,15 @@
   display: inline-block;
   width: 1rem;
   height: 1rem;
-  border: 2px solid rgba(255, 255, 255, 0.5);
+  border: 2px solid rgba($white, 0.5);
   border-radius: 50%;
-  border-top-color: #fff;
+  border-top-color: $white;
   animation: spin 1s ease-in-out infinite;
   vertical-align: middle;
 }
 
 .spinnerText {
-  margin-left: 0.5rem;
+  margin-left: $spacing-xs;
 }
 
 @keyframes spin {

@@ -1,19 +1,21 @@
+@import '../../../styles/index';
+
 .errorContainer {
   display: flex;
   align-items: center;
-  margin-top: 0.25rem;
-  color: #dc2626;
-  font-size: 0.875rem;
+  margin-top: $spacing-xs;
+  color: $danger;
+  font-size: $font-size-sm;
   line-height: 1.25rem;
 }
 
 .errorIcon {
-  margin-right: 0.375rem;
+  margin-right: $spacing-xs;
   flex-shrink: 0;
   height: 1rem;
   width: 1rem;
 }
 
 .errorText {
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 } 

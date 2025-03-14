@@ -1,5 +1,7 @@
+@import '../../../styles/index';
+
 .checkboxGroup {
-  margin-bottom: 1rem;
+  margin-bottom: $spacing-md;
 }
 
 .container {
@@ -8,10 +10,10 @@
 }
 
 .checkbox {
-  margin-right: 0.5rem;
+  margin-right: $spacing-xs;
 
   &.error {
-    border-color: var(--danger-color);
+    border-color: $danger;
   }
 }
 
@@ -20,13 +22,13 @@
 }
 
 .errorText {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: var(--danger-color);
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $danger;
 }
 
 .helperText {
-  margin-top: 0.25rem;
-  font-size: 0.875rem;
-  color: #6c757d;
+  margin-top: $spacing-xs;
+  font-size: $font-size-sm;
+  color: $gray-600;
 }

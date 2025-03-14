@@ -5,12 +5,8 @@ import { ErrorMessage } from '@/components/common/ErrorMessage';
 import styles from './Input.module.scss';
 import { InputConfig } from './types';
 
-// Extend HTML input props with our configuration
 export type InputProps = InputHTMLAttributes<HTMLInputElement> & InputConfig;
 
-/**
- * Reusable Input component with simplified props
- */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ 
     label, 
@@ -24,17 +20,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const getInputClasses = () => {
       const classes = [styles.input];
       
-      // Add error class if needed
       if (error) {
         classes.push(styles.error);
       }
       
-      // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
       
-      // Add custom class if provided
       if (className) {
         classes.push(className);
       }
@@ -46,12 +39,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const getContainerClasses = () => {
       const classes = [styles.formGroup];
       
-      // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
       
-      // Add custom class if provided
       if (containerClassName) {
         classes.push(containerClassName);
       }

@@ -4,9 +4,6 @@ import { SkeletonCard } from '../Card/SkeletonCard';
 import { SkeletonFormListProps } from '../types';
 
 /**
- * SkeletonFormList component for form list loading states
- * Displays a grid of skeleton form cards
- *
  * @param count - Number of skeleton cards to display
  * @param className - Additional CSS class for the container
  * @param gridClassName - Additional CSS class for the grid

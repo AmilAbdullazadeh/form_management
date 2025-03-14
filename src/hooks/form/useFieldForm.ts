@@ -2,10 +2,9 @@
 
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 
-import { FieldFormValues, FieldType } from '@/types/form';
 import { FORM_FIELD_VALIDATION_ERRORS } from '@/constants/form-labels';
+import { FieldFormValues, FieldType } from '@/types/form';
 
-// Default field values
 export const DEFAULT_FIELD_VALUES: FieldFormValues = {
   type: FieldType.TEXT,
   label: '',
@@ -21,17 +20,11 @@ interface UseFieldFormProps {
   formId?: string;
 }
 
-/**
- * Custom hook for managing field form state, validation, and submission
- */
-// eslint-disable-next-line no-unused-vars
 export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => {
-  // State for field values
   const [values, setValues] = useState<FieldFormValues>(DEFAULT_FIELD_VALUES);
   const [errors, setErrors] = useState<Partial<Record<keyof FieldFormValues, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle input change
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     
@@ -48,7 +41,6 @@ export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => 
     }
   }, [errors]);
 
-  // Validate form
   const validateForm = useCallback(() => {
     const newErrors: Partial<Record<keyof FieldFormValues, string>> = {};
     
@@ -56,7 +48,6 @@ export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => 
       newErrors.label = FORM_FIELD_VALIDATION_ERRORS.LABEL_REQUIRED;
     }
     
-    // For dropdown and radio, options are required
     if ((values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO) && !values.options?.trim()) {
       newErrors.options = FORM_FIELD_VALIDATION_ERRORS.OPTIONS_REQUIRED;
     }
@@ -65,7 +56,6 @@ export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => 
     return Object.keys(newErrors).length === 0;
   }, [values]);
 
-  // Handle form submission
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     
@@ -76,13 +66,10 @@ export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => 
     setIsSubmitting(true);
     
     try {
-      // Process options string into array if needed
       const processedValues = { ...values };
       
-      // Call the onSave callback
       await onSave(processedValues);
       
-      // Close the modal
       onClose();
     } catch (error) {
       console.error('Error saving field:', error);
@@ -91,13 +78,11 @@ export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => 
     }
   }, [values, validateForm, onSave, onClose]);
 
-  // Reset form
   const resetForm = useCallback(() => {
     setValues(DEFAULT_FIELD_VALUES);
     setErrors({});
   }, []);
 
-  // Determine if options field should be shown
   const showOptionsField = values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO;
 
   return {

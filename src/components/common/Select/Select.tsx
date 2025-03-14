@@ -5,11 +5,9 @@ import { ErrorMessage } from '@/components/common/ErrorMessage';
 import styles from './Select.module.scss';
 import { SelectConfig } from './types';
 
-// Extend HTML select props with our configuration
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & SelectConfig;
 
 /**
- * Reusable Select component with simplified props
  */
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ 
@@ -25,17 +23,14 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const getSelectClasses = () => {
       const classes = [styles.select];
       
-      // Add error class if needed
       if (error) {
         classes.push(styles.error);
       }
       
-      // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
       
-      // Add custom class if provided
       if (className) {
         classes.push(className);
       }
@@ -47,12 +42,10 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const getContainerClasses = () => {
       const classes = [styles.formGroup];
       
-      // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
       
-      // Add custom class if provided
       if (containerClassName) {
         classes.push(containerClassName);
       }
@@ -86,5 +79,4 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   }
 );
 
-// Add display name for React DevTools
 Select.displayName = 'Select'; 

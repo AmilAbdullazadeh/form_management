@@ -1,4 +1,30 @@
+@import '../../../../../styles/index';
+
 .disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+
+.readOnly {
+  border-left: 4px solid $warning;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba($warning, 0.2);
+  }
+}
+
+.fieldIcon, .submissionIcon {
+  font-size: $font-size-base;
+  margin-right: $spacing-xs;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fieldIcon {
+  color: $primary;
+}
+
+.submissionIcon {
+  color: $success;
 }

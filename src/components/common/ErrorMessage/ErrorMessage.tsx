@@ -3,10 +3,6 @@ import React from 'react';
 import styles from './ErrorMessage.module.scss';
 import { ErrorMessageProps } from './types';
 
-/**
- * ErrorMessage component for displaying form validation errors
- * with a visual icon indicator
- */
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   if (!message) return null;
   

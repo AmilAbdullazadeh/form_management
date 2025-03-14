@@ -6,27 +6,25 @@ import { Modal } from '../Modal';
 
 import { ModalConfig, ModalContextType } from './types';
 
-// Create context with default values
 const ModalContext = createContext<ModalContextType>({
   openModal: () => {},
   closeModal: () => {},
 });
 
-// Hook to use the modal context
 export const useModal = () => useContext(ModalContext);
 
-// Modal provider component
+/**
+ * Modal provider for the modal context
+ */
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig | null>(null);
 
-  // Open modal with configuration
   const openModal = (config: ModalConfig) => {
     setModalConfig(config);
     setIsOpen(true);
   };
 
-  // Close modal
   const closeModal = () => {
     setIsOpen(false);
   };

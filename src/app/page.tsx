@@ -9,7 +9,6 @@ export default function HomePage() {
         <Skeleton type="title" className='mx-auto w-1/2' />
         <Skeleton type="text" size="md" className='mt-4 mx-auto' />
         
-        {/* Skeleton cards to indicate content is loading */}
         <div className="mt-6 max-w-600px mx-auto">
           <Skeleton type="card" count={2} />
         </div>

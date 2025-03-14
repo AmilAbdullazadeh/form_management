@@ -1,69 +1,97 @@
+@import '../../../styles/index';
+
 .fieldsSection {
-  margin-top: 2rem;
-  border-top: 1px solid #e9ecef;
-  padding-top: 1rem;
+  margin-top: $spacing-xl;
+  border-top: 1px solid $gray-200;
+  padding-top: $spacing-md;
 }
 
 .fieldsSectionHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1rem;
+  @include flex-between-center;
+  margin-bottom: $spacing-md;
 }
 
 .fieldsList {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: $spacing-sm;
 }
 
 .fieldItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  border: 1px solid #e9ecef;
-  border-radius: 0.25rem;
-  background-color: #f8f9fa;
+  @include flex-between-center;
+  padding: $spacing-sm;
+  border: 1px solid $gray-200;
+  border-radius: $border-radius-sm;
+  background-color: $gray-100;
+  transition: all 0.2s ease;
+  cursor: default;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+  
+  &.dragging {
+    opacity: 0.4;
+    border: 1px dashed $primary;
+  }
+  
+  &[draggable=true] {
+    cursor: grab;
+    
+    &:active {
+      cursor: grabbing;
+    }
+  }
 }
 
 .fieldInfo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  @include flex-center;
+  gap: $spacing-sm;
+}
+
+.dragHandle {
+  color: $gray-500;
+  font-size: $font-size-lg;
+  cursor: grab;
+  user-select: none;
+  margin-right: $spacing-xs;
+  
+  &:hover {
+    color: $gray-700;
+  }
 }
 
 .fieldLabel {
-  font-weight: 500;
+  font-weight: $font-weight-medium;
 }
 
 .fieldType {
-  font-size: 0.75rem;
-  color: #6c757d;
-  padding: 0.25rem 0.5rem;
-  background-color: #e9ecef;
-  border-radius: 0.25rem;
+  font-size: $font-size-xs;
+  color: $gray-600;
+  padding: $spacing-xs $spacing-sm;
+  background-color: $gray-200;
+  border-radius: $border-radius-md;
 }
 
 .fieldRequired {
-  font-size: 0.75rem;
-  color: #dc3545;
-  padding: 0.25rem 0.5rem;
-  background-color: rgba(220, 53, 69, 0.1);
-  border-radius: 0.25rem;
+  font-size: $font-size-xs;
+  color: $danger;
+  padding: $spacing-xs $spacing-sm;
+  background-color: rgba($danger, 0.1);
+  border-radius: $border-radius-md;
 }
 
 .noFields {
   text-align: center;
-  padding: 1rem;
-  color: #6c757d;
-  background-color: #f8f9fa;
-  border: 1px dashed #ced4da;
-  border-radius: 0.25rem;
+  padding: $spacing-md;
+  color: $gray-600;
+  background-color: $gray-100;
+  border: 1px dashed $gray-300;
+  border-radius: $border-radius-md;
 }
 
 .deleteButton {
   min-width: auto;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
 } 

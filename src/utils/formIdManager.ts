@@ -7,7 +7,7 @@ import { AppDispatch } from '@/lib/redux/store';
 import { FormField } from '@/types/form';
 
 /**
- * Utility for managing form IDs and related operations
+ * Managing form IDs and related operations
  * Encapsulates ID generation and field management logic
  */
 export const FormIdManager = {
@@ -28,12 +28,9 @@ export const FormIdManager = {
     newFormId: string
   ): void => {
     if (formFields.length > 0) {
-      // First delete the temporary fields
       dispatch(deleteFormFields(tempFormId));
       
-      // Then add them with the correct formId
       formFields.forEach(field => {
-        // Create a new field object without the id
         dispatch(addField({
           formId: newFormId,
           type: field.type,

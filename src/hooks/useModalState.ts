@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 
 /**
- * Custom hook for managing modal state
+ * Mnaging modal state
  * Provides open/close functionality and state tracking
  */
 export const useModalState = (initialState: boolean = false) => {

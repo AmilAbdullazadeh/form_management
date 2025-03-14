@@ -8,7 +8,6 @@ import styles from './Modal.module.scss';
 import { ModalProps } from './types';
 
 /**
- * Reusable Modal component
  * 
  * @param isOpen - Whether the modal is open
  * @param onClose - Function to close the modal
@@ -39,12 +38,12 @@ export const Modal: React.FC<ModalProps> = ({
     
     if (isOpen) {
       document.addEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+      document.body.style.overflow = 'hidden';
     }
     
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = ''; // Restore scrolling when modal is closed
+      document.body.style.overflow = '';
     };
   }, [isOpen, onClose]);
   

@@ -9,7 +9,7 @@ import { useModal } from '../ModalContent/ModalContext';
 import { FormModalProps } from './types';
 
 /**
- * Opens a generic form modal
+ * Gneric form modal
  */
 export const useFormModal = () => {
   const { openModal, closeModal } = useModal();

@@ -12,9 +12,6 @@ import { FormContent } from './FormModalContent';
 import styles from './FormModalContent.module.scss';
 import { FormModalRenderProps } from './types';
 
-/**
- * Renderer component for the form modal to reduce main component size
- */
 export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
   isOpen,
   onClose,
@@ -32,7 +29,8 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
   isFieldModalOpen,
   handleCloseFieldModal,
   handleSaveField,
-  formId
+  formId,
+  reorderFormFields
 }) => {
   // Modal title and submit button text based on mode
   const modalTitle = isViewOnly ? FORM_MODAL_TEXT[FormModalMode.VIEW].TITLE : FORM_MODAL_TEXT[mode].TITLE;
@@ -59,13 +57,18 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
       )}
     </>
   );
-  
+
+  const enhancedTitle = isViewOnly && formFields.length > 0 
+    ? `${modalTitle} (${formFields.length} fields)` 
+    : modalTitle;
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={modalTitle}
+      title={enhancedTitle}
       footer={modalFooter}
+      size="lg"
     >
       <div className={`${styles.formContainer} ${isViewOnly ? styles.readOnlyForm : ''}`}>
         <form id="form-modal" onSubmit={handleSubmit} noValidate>
@@ -78,11 +81,11 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
             handleOpenFieldModal={handleOpenFieldModal}
             handleDeleteField={handleDeleteField}
             submitError={submitError}
+            reorderFormFields={reorderFormFields}
           />
         </form>
       </div>
       
-      {/* Field Modal - show in both create and update modes */}
       <FieldModal
         isOpen={isFieldModalOpen}
         onClose={handleCloseFieldModal}

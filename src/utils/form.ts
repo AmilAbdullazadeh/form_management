@@ -63,11 +63,10 @@ export const extractFormValues = (form?: Partial<Form>): FormValues => {
       isReadOnly: parseDescriptionProperty(description, 'isReadOnly')
     };
   } else {
-    // For forms with descriptions that don't follow our format, use default values for booleans
     return {
       title: form.title || '',
-      isVisible: true, // Default to visible
-      isReadOnly: false // Default to not read-only
+      isVisible: true,
+      isReadOnly: false
     };
   }
 };
