@@ -58,12 +58,17 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
     </>
   );
 
+  const enhancedTitle = isViewOnly && formFields.length > 0 
+    ? `${modalTitle} (${formFields.length} fields)` 
+    : modalTitle;
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={modalTitle}
+      title={enhancedTitle}
       footer={modalFooter}
+      size="lg"
     >
       <div className={`${styles.formContainer} ${isViewOnly ? styles.readOnlyForm : ''}`}>
         <form id="form-modal" onSubmit={handleSubmit} noValidate>

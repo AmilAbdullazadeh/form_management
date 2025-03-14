@@ -1,6 +1,5 @@
 @import '../../../styles/index';
 
-// Form layout
 .formContainer {
   padding: $spacing-md;
 }
@@ -50,7 +49,57 @@
   }
 }
 
-// Fields section
+.formSummary {
+  margin-bottom: $spacing-md;
+  padding: $spacing-md;
+  background-color: $gray-100;
+  border-radius: $border-radius-md;
+  border: 1px solid $gray-200;
+}
+
+.formSummaryItem {
+  @include flex;
+  @include items-center;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-xs;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.formSummaryLabel {
+  font-weight: $font-weight-medium;
+  color: $gray-700;
+}
+
+.formSummaryValue {
+  font-weight: $font-weight-bold;
+  color: $primary;
+  background-color: rgba($primary, 0.1);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-sm;
+}
+
+.fieldsContainer {
+  margin-bottom: $spacing-md;
+  
+  &.readOnlyFields {
+    .fieldItem {
+      background-color: $gray-500;
+      border-color: $gray-200;
+      
+      &:hover {
+        background-color: $gray-100;
+      }
+    }
+    
+    .dragHandle {
+      display: none;
+    }
+  }
+}
+
 .fieldsSection {
   margin-top: $spacing-xl;
   border-top: 1px solid $gray-200;

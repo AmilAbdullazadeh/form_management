@@ -45,7 +45,17 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
     e.stopPropagation();
     if (onDelete) onDelete(form.id);
   };
-  
+
+  const fieldCountDisplay = fields !== undefined ? {
+    icon: <span className={styles.fieldIcon}>📋</span>,
+    text: `${fields} ${fields === 1 ? 'field' : 'fields'}`
+  } : null;
+
+  const submissionsCountDisplay = submissions !== undefined ? {
+    icon: <span className={styles.submissionIcon}>📝</span>,
+    text: `${submissions} ${submissions === 1 ? 'submission' : 'submissions'}`
+  } : null;
+
   return (
     <FormCard
       title={title}
@@ -53,10 +63,10 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
         getBadge('visible'),
         getBadge('readonly')
       ]}
-      className={`${className} ${!isFormVisible ? styles.disabled : ''} ${isFormReadOnly ? styles.readonly : ''}`}
+      className={`${className} ${!isFormVisible ? styles.disabled : ''} ${isFormReadOnly ? styles.readOnly : ''}`}
       metadata={[
-        ...(fields !== undefined ? [{ text: `${fields} fields` }] : []),
-        ...(submissions !== undefined ? [{ text: `${submissions} submissions` }] : [])
+        ...(fieldCountDisplay ? [fieldCountDisplay] : []),
+        ...(submissionsCountDisplay ? [submissionsCountDisplay] : [])
       ]}
       actions={
         <>

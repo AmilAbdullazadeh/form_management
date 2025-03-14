@@ -1,16 +1,16 @@
-@import '@/styles/variables/colors';
-@import '@/styles/variables/spacing';
-@import '@/styles/mixins/responsive';
+@import '@/styles/index';
 
 .formCard {
   background-color: $white;
-  border-radius: 8px;
+  border-radius: $border-radius-md;
   box-shadow: 0 2px 8px rgba($black, 0.1);
   padding: $spacing-lg;
   margin-bottom: $spacing-md;
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
 
   &:hover {
     transform: translateY(-2px);
@@ -25,7 +25,7 @@
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: $spacing-md;
   padding-bottom: $spacing-sm;
   border-bottom: 1px solid $gray-200;
@@ -33,13 +33,14 @@
 
 .title {
   font-size: 1.25rem;
-  font-weight: 600;
+  font-weight: $font-weight-bold;
   color: $gray-900;
   margin: 0;
+  margin-bottom: $spacing-xs;
 }
 
 .subtitle {
-  font-size: 0.875rem;
+  font-size: $font-size-sm;
   color: $gray-600;
   margin-top: $spacing-xs;
 }
@@ -58,14 +59,18 @@
 
 .icon {
   margin-right: $spacing-xs;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge {
   display: inline-block;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
   border-radius: 9999px;
+  margin-left: $spacing-xs;
 
   &.primary {
     background-color: rgba($primary, 0.1);
@@ -91,15 +96,22 @@
 .meta {
   display: flex;
   align-items: center;
-  gap: $spacing-sm;
+  gap: $spacing-md;
   margin-top: $spacing-sm;
-  font-size: 0.875rem;
+  font-size: $font-size-sm;
   color: $gray-600;
 }
 
 .metaItem {
   display: flex;
   align-items: center;
+  padding: $spacing-xs $spacing-sm;
+  background-color: $gray-100;
+  border-radius: $border-radius-sm;
+  
+  &:hover {
+    background-color: $gray-200;
+  }
 }
 
 .actions {
