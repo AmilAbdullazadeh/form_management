@@ -1,16 +1,6 @@
 import { useState, useCallback } from 'react';
 
-interface ApiState<T> {
-  data: T | null;
-  isLoading: boolean;
-  error: Error | null;
-}
-
-interface ApiOptions {
-  onSuccess?: (data: any) => void;
-  onError?: (error: Error) => void;
-}
-
+import { ApiOptions, ApiState } from '@/types/hook';
 /**
  * Custom hook for handling API requests
  * 

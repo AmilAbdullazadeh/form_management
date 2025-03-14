@@ -6,11 +6,11 @@ export default function HomePage() {
   return (
     <main className="container">
       <div style={{ textAlign: 'center', marginTop: '4rem' }}>
-        <Skeleton type="title" style={{ margin: '0 auto', width: '50%' }} />
-        <Skeleton type="text" size="md" style={{ margin: '1rem auto' }} />
+        <Skeleton type="title" className='mx-auto w-1/2' />
+        <Skeleton type="text" size="md" className='mt-4 mx-auto' />
         
         {/* Skeleton cards to indicate content is loading */}
-        <div style={{ maxWidth: '600px', margin: '3rem auto' }}>
+        <div className="mt-6 max-w-600px mx-auto">
           <Skeleton type="card" count={2} />
         </div>
       </div>

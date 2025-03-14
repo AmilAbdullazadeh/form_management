@@ -6,6 +6,12 @@ export type SkeletonType = 'text' | 'title' | 'card' | 'circle' | 'custom';
 // Define the sizes for text skeletons
 export type SkeletonSize = 'sm' | 'md' | 'lg' | 'full';
 
+export interface SkeletonFormListProps {
+  count?: number;
+  className?: string;
+  gridClassName?: string;
+}
+
 export interface SkeletonProps {
   type?: SkeletonType;
   size?: SkeletonSize;

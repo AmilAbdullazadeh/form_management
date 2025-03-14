@@ -1,0 +1,69 @@
+.fieldsSection {
+  margin-top: 2rem;
+  border-top: 1px solid #e9ecef;
+  padding-top: 1rem;
+}
+
+.fieldsSectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.fieldsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.fieldItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border: 1px solid #e9ecef;
+  border-radius: 0.25rem;
+  background-color: #f8f9fa;
+}
+
+.fieldInfo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fieldLabel {
+  font-weight: 500;
+}
+
+.fieldType {
+  font-size: 0.75rem;
+  color: #6c757d;
+  padding: 0.25rem 0.5rem;
+  background-color: #e9ecef;
+  border-radius: 0.25rem;
+}
+
+.fieldRequired {
+  font-size: 0.75rem;
+  color: #dc3545;
+  padding: 0.25rem 0.5rem;
+  background-color: rgba(220, 53, 69, 0.1);
+  border-radius: 0.25rem;
+}
+
+.noFields {
+  text-align: center;
+  padding: 1rem;
+  color: #6c757d;
+  background-color: #f8f9fa;
+  border: 1px dashed #ced4da;
+  border-radius: 0.25rem;
+}
+
+.deleteButton {
+  min-width: auto;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+} 

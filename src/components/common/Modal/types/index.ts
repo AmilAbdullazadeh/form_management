@@ -18,4 +18,4 @@ export interface ModalConfig {
     footer?: ReactNode;
     size?: ModalSize;
     closeOnOutsideClick?: boolean;
-  }
+}

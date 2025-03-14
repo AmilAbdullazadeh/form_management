@@ -1,19 +1,7 @@
-// Button component
-import React, { ButtonHTMLAttributes } from 'react';
+import React from 'react';
 
 import styles from './Button.module.scss';
-
-type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'outline';
-type ButtonSize = 'sm' | 'md' | 'lg';
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  isLoading?: boolean;
-  fullWidth?: boolean;
-  className?: string;
-  children: React.ReactNode;
-}
+import { ButtonProps } from './types';
 
 /**
  * Reusable Button component

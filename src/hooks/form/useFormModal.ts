@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FORM_VALIDATION_ERRORS } from '@/constants/form';
-import { useForm } from '@/hooks/useForm';
+import { useForm } from '@/hooks/form/useForm';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { addForm, updateForm } from '@/lib/redux/slices/formsSlice';
-import { FormModalProps, FormValues } from '@/types/form';
+import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
 import { generateFormDescription, getInitialFormValues } from '@/utils/form';
-import { validateFormValues } from '@/utils/validation';
+import { validateForm } from '@/utils/validation';
 
 /**
  * Custom hook for form modal logic
@@ -17,7 +17,7 @@ import { validateFormValues } from '@/utils/validation';
 export const useFormModal = ({ 
   isOpen, 
   onClose, 
-  mode = 'create',
+  mode = FormModalMode.CREATE,
   initialForm = {} 
 }: FormModalProps) => {
   const dispatch = useAppDispatch();
@@ -67,7 +67,7 @@ export const useFormModal = ({
   } = useForm<FormValues>({
     initialValues: getInitialFormValues(initialForm),
     onSubmit: handleFormSubmit,
-    validate: validateFormValues
+    validate: (values: FormValues) => validateForm(values, forms, currentFormId)
   });
   
   // Handle initialForm changes and modal open/close

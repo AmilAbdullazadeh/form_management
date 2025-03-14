@@ -1,15 +1,7 @@
-import React, { InputHTMLAttributes, forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 
 import styles from './Checkbox.module.scss';
-
-interface CheckboxProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> {
-  label: string;
-  error?: string;
-  helperText?: string;
-  className?: string;
-  containerClassName?: string;
-}
-
+import { CheckboxProps } from './types';
 /**
  * Reusable Checkbox component
  *

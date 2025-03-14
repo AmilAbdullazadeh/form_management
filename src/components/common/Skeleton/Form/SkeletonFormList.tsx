@@ -1,12 +1,7 @@
 import React from 'react';
 
 import { SkeletonCard } from '../Card/SkeletonCard';
-
-interface SkeletonFormListProps {
-  count?: number;
-  className?: string;
-  gridClassName?: string;
-}
+import { SkeletonFormListProps } from '../types';
 
 /**
  * SkeletonFormList component for form list loading states

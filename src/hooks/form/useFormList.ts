@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { deleteForm, selectAllForms, selectFormById, selectFormsStatus } from '@/lib/redux/slices/formsSlice';
-import { ModalState } from '@/types/form';
+import { FormModalMode, ModalState } from '@/types/form';
 
 /**
  * Custom hook for form list functionality
@@ -20,7 +20,7 @@ export const useFormList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [modalState, setModalState] = useState<ModalState>({
     isOpen: false,
-    mode: 'create',
+    mode: FormModalMode.CREATE,
     selectedFormId: null
   });
   
@@ -45,7 +45,7 @@ export const useFormList = () => {
   const handleOpenCreateModal = useCallback(() => {
     setModalState({
       isOpen: true,
-      mode: 'create',
+      mode: FormModalMode.CREATE,
       selectedFormId: null
     });
   }, []);
@@ -54,7 +54,7 @@ export const useFormList = () => {
   const handleEdit = useCallback((id: string) => {
     setModalState({
       isOpen: true,
-      mode: 'update',
+      mode: FormModalMode.UPDATE,
       selectedFormId: id
     });
   }, []);

@@ -7,7 +7,7 @@ import { Checkbox } from '@/components/common/Checkbox';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { Select } from '@/components/common/Select';
-import { useFieldForm } from '@/hooks/useFieldForm';
+import { useFieldForm } from '@/hooks/form/useFieldForm';
 import { FieldModalProps, FieldType } from '@/types/form';
 
 import styles from './FieldModal.module.scss';
@@ -30,7 +30,8 @@ const FIELD_TYPE_OPTIONS = [
 export const FieldModal: React.FC<FieldModalProps> = ({
   isOpen,
   onClose,
-  onSave
+  onSave,
+  formId
 }) => {
   // Use the field form hook
   const {
@@ -41,7 +42,7 @@ export const FieldModal: React.FC<FieldModalProps> = ({
     handleChange,
     handleSubmit,
     resetForm
-  } = useFieldForm({ onSave, onClose });
+  } = useFieldForm({ onSave, onClose, formId });
 
   // Reset form when modal closes
   const handleModalClose = useCallback(() => {

@@ -1,7 +1,14 @@
-import { Form } from '@/lib/redux/slices/formsSlice';
+import { Form } from '@/types/hook';
+
+export interface ModalState {
+  isOpen: boolean;
+  mode: FormModalMode;
+  selectedFormId: string | null;
+}
 
 /**
  * Field type enum for different form field types
+ * These values should match the corresponding values in FieldTypes constants
  */
 export enum FieldType {
   TEXT = 'text',
@@ -42,11 +49,12 @@ export interface FieldFormValues {
 
 /**
  * Modal mode enum to identify create, update, or view operations
+ * These values should match the corresponding values in FormOperations constants
  */
 export enum FormModalMode {
-  CREATE = 'create',
-  UPDATE = 'update',
-  VIEW = 'view'
+  CREATE = 'creating',
+  UPDATE = 'updating',
+  VIEW = 'viewing'
 }
 
 /**

@@ -1,41 +1,17 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Form, FormsState } from '@/types/hook';
+import { initialFormsState } from '@/constants/states';
+import { Form } from '@/types/hook';
 
 import { RootState } from '../store';
-
-const initialState: FormsState = {
-  forms: [
-    {
-      id: uuidv4(),
-      title: 'UserRegistration',
-      description: 'Form for new user registration',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: uuidv4(),
-      title: 'ContactForm',
-      description: 'Contact us form for inquiries',
-      createdAt: new Date().toISOString(),
-    },
-    {
-      id: uuidv4(),
-      title: 'FeedbackSurvey',
-      description: 'Customer feedback survey form',
-      createdAt: new Date().toISOString(),
-    },
-  ],
-  status: 'idle',
-  error: null
-};
 
 export type FormCreatePayload = Omit<Form, 'id' | 'createdAt'>;
 export type FormUpdatePayload = Partial<Form> & { id: string };
 
 export const formsSlice = createSlice({
   name: 'forms',
-  initialState,
+  initialState: initialFormsState,
   reducers: {
     addForm: (state, action: PayloadAction<FormCreatePayload>) => {
       const newForm = {

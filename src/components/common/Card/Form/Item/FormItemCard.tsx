@@ -8,22 +8,7 @@ import { BadgeVariant } from '@/components/common/Card/Form/types';
 import { parseDescriptionProperty } from '@/utils/form';
 
 import styles from './FormItemCard.module.scss';
-
-export interface FormItem {
-  id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  fields?: number;
-  submissions?: number;
-}
-
-interface FormItemCardProps {
-  form: FormItem;
-  onEdit?: (id: string) => void;
-  onDelete?: (id: string) => void;
-  className?: string;
-}
+import { FormItemCardProps } from './types';
 
 /**
  * FormItemCard component for displaying form items

@@ -1,6 +1,6 @@
 import { FORM_VALIDATION_ERRORS } from '@/constants/form';
-import { Form } from '@/lib/redux/slices/formsSlice';
 import { FormValues } from '@/types/form';
+import { Form } from '@/types/hook';
 
 /**
  * Form validation-related utility functions
@@ -41,6 +41,11 @@ export const isFormNameValidFormat = (name: string): boolean => {
  * @returns True if the name is unique, false otherwise
  */
 export const isFormNameUnique = (name: string, forms: Form[], currentFormId?: string): boolean => {
+  // If forms is undefined or not an array, return true (no duplicates)
+  if (!forms || !Array.isArray(forms)) {
+    return true;
+  }
+  
   return !forms.some(form => 
     form.title === name && 
     // Skip checking against the current form in update mode
@@ -57,10 +62,16 @@ export const isFormNameUnique = (name: string, forms: Form[], currentFormId?: st
  */
 export const validateForm = (
   values: FormValues, 
-  forms: Form[], 
+  forms: Form[] = [], // Default to empty array if forms is undefined
   currentFormId?: string
 ): Partial<Record<keyof FormValues, string>> => {
   const errors: Partial<Record<keyof FormValues, string>> = {};
+  
+  // Safely check if title exists and is not undefined
+  if (!values || values.title === undefined) {
+    errors.title = FORM_VALIDATION_ERRORS.TITLE_REQUIRED;
+    return errors;
+  }
   
   // Check if title is empty
   if (isFormNameEmpty(values.title)) {
@@ -80,9 +91,11 @@ export const validateForm = (
     return errors;
   }
   
-  // Check for uniqueness
-  if (!isFormNameUnique(values.title, forms, currentFormId)) {
-    errors.title = FORM_VALIDATION_ERRORS.TITLE_UNIQUE;
+  // Check for uniqueness only if we have forms to check against
+  if (forms && forms.length > 0) {
+    if (!isFormNameUnique(values.title, forms, currentFormId)) {
+      errors.title = FORM_VALIDATION_ERRORS.TITLE_UNIQUE;
+    }
   }
   
   return errors;

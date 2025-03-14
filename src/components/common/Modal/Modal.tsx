@@ -5,18 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import { Button } from '@/components/common';
 
 import styles from './Modal.module.scss';
-
-export type ModalSize = 'sm' | 'md' | 'lg';
-
-export interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  title: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
-  size?: ModalSize;
-  closeOnOutsideClick?: boolean;
-}
+import { ModalProps } from './types';
 
 /**
  * Reusable Modal component

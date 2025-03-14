@@ -1,14 +1,6 @@
-import { Form } from '@/lib/redux/slices/formsSlice';
+import { DEFAULT_FORM_VALUES } from '@/constants/states';
 import { FormValues } from '@/types/form';
-
-/**
- * Default form values
- */
-export const DEFAULT_FORM_VALUES: FormValues = {
-  title: '',
-  isVisible: true,
-  isReadOnly: false
-};
+import { Form } from '@/types/hook';
 
 /**
  * Parse the form description to extract boolean values
@@ -21,6 +13,8 @@ export const parseDescriptionProperty = (
   description: string,
   property: 'isVisible' | 'isReadOnly'
 ): boolean => {
+  if (!description) return property === 'isVisible' ? true : false; // Default values
+  
   const propertyName = property === 'isVisible' ? 'Visible' : 'ReadOnly';
   return description.includes(`${propertyName}: true`);
 };
@@ -58,11 +52,24 @@ export const extractFormValues = (form?: Partial<Form>): FormValues => {
   }
 
   const description = form.description || '';
-  return {
-    title: form.title || '',
-    isVisible: parseDescriptionProperty(description, 'isVisible'),
-    isReadOnly: parseDescriptionProperty(description, 'isReadOnly')
-  };
+  
+  // Check if the description follows our format
+  const hasFormattedDescription = description.includes('Visible:') || description.includes('ReadOnly:');
+  
+  if (hasFormattedDescription) {
+    return {
+      title: form.title || '',
+      isVisible: parseDescriptionProperty(description, 'isVisible'),
+      isReadOnly: parseDescriptionProperty(description, 'isReadOnly')
+    };
+  } else {
+    // For forms with descriptions that don't follow our format, use default values for booleans
+    return {
+      title: form.title || '',
+      isVisible: true, // Default to visible
+      isReadOnly: false // Default to not read-only
+    };
+  }
 };
 
 /**

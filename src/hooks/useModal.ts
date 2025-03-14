@@ -18,7 +18,6 @@ export function useModal() {
 
   const close = useCallback(() => {
     setIsOpen(false);
-    // Optional: Clear data when closing
     // setData(null);
   }, []);
 

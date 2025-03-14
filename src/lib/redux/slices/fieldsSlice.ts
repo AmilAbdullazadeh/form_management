@@ -1,23 +1,17 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 
+import { initialFieldsState } from '@/constants/states';
 import { FormField } from '@/types/form';
-import { FieldsState } from '@/types/hook';
 
 import { RootState } from '../store';
-
-const initialState: FieldsState = {
-  fields: [],
-  status: 'idle',
-  error: null
-};
 
 export type FieldCreatePayload = Omit<FormField, 'id'>;
 export type FieldUpdatePayload = Partial<FormField> & { id: string };
 
 export const fieldsSlice = createSlice({
   name: 'fields',
-  initialState,
+  initialState: initialFieldsState,
   reducers: {
     addField: (state, action: PayloadAction<FieldCreatePayload>) => {
       const newField = {
