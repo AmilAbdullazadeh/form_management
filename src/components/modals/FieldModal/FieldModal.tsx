@@ -1,25 +1,16 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 
 import { Button } from '@/components/common/Button';
 import { Checkbox } from '@/components/common/Checkbox';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { Select } from '@/components/common/Select';
-import { FieldFormValues, FieldModalProps, FieldType } from '@/types/form';
+import { useFieldForm } from '@/hooks/useFieldForm';
+import { FieldModalProps, FieldType } from '@/types/form';
 
 import styles from './FieldModal.module.scss';
-
-// Default field values
-const DEFAULT_FIELD_VALUES: FieldFormValues = {
-  type: FieldType.TEXT,
-  label: '',
-  placeholder: '',
-  required: false,
-  options: '',
-  defaultValue: ''
-};
 
 // Field type options for the dropdown
 const FIELD_TYPE_OPTIONS = [
@@ -39,83 +30,24 @@ const FIELD_TYPE_OPTIONS = [
 export const FieldModal: React.FC<FieldModalProps> = ({
   isOpen,
   onClose,
-  formId,
   onSave
 }) => {
-  // State for field values
-  const [values, setValues] = useState<FieldFormValues>(DEFAULT_FIELD_VALUES);
-  const [errors, setErrors] = useState<Partial<Record<keyof FieldFormValues, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Handle input change
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setValues(prev => ({ ...prev, [name]: checked }));
-    } else {
-      setValues(prev => ({ ...prev, [name]: value }));
-    }
-    
-    // Clear error when field is changed
-    if (errors[name as keyof FieldFormValues]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  }, [errors]);
-
-  // Validate form
-  const validateForm = useCallback(() => {
-    const newErrors: Partial<Record<keyof FieldFormValues, string>> = {};
-    
-    if (!values.label.trim()) {
-      newErrors.label = 'Field label is required';
-    }
-    
-    // For dropdown and radio, options are required
-    if ((values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO) && !values.options?.trim()) {
-      newErrors.options = 'Options are required for dropdown and radio fields';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [values]);
-
-  // Handle form submission
-  const handleSubmit = useCallback(async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    
-    try {
-      // Process options string into array if needed
-      const processedValues = { ...values };
-      
-      // Call the onSave callback
-      await onSave(processedValues);
-      
-      // Close the modal
-      onClose();
-    } catch (error) {
-      console.error('Error saving field:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [values, validateForm, onSave, onClose]);
+  // Use the field form hook
+  const {
+    values,
+    errors,
+    isSubmitting,
+    showOptionsField,
+    handleChange,
+    handleSubmit,
+    resetForm
+  } = useFieldForm({ onSave, onClose });
 
   // Reset form when modal closes
   const handleModalClose = useCallback(() => {
-    setValues(DEFAULT_FIELD_VALUES);
-    setErrors({});
+    resetForm();
     onClose();
-  }, [onClose]);
-
-  // Determine if options field should be shown
-  const showOptionsField = values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO;
+  }, [onClose, resetForm]);
 
   // Modal footer with action buttons
   const modalFooter = (

@@ -83,7 +83,7 @@ export interface FormModalState {
 export interface FieldModalProps {
   isOpen: boolean;
   onClose: () => void;
-  formId: string;
+  formId?: string;
   onSave: (field: FieldFormValues) => void;
 }
 

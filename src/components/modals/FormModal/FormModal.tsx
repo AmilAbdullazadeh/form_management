@@ -231,7 +231,6 @@ export const FormModal: React.FC<FormModalProps> = ({
         <FieldModal
           isOpen={isFieldModalOpen}
           onClose={handleCloseFieldModal}
-          formId={initialForm.id}
           onSave={handleSaveField}
         />
       )}
