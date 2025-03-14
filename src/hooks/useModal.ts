@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 
 /**
  * Custom hook for managing modal state
- *
+ * 
  * @returns Modal state and handlers
  */
 export function useModal() {
@@ -23,7 +23,7 @@ export function useModal() {
   }, []);
 
   const toggle = useCallback(() => {
-    setIsOpen(prev => !prev);
+    setIsOpen((prev) => !prev);
   }, []);
 
   return {
@@ -34,4 +34,4 @@ export function useModal() {
     toggle,
     setData,
   };
-}
+} 

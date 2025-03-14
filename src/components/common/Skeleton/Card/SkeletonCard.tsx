@@ -22,4 +22,4 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '', styl
       </div>
     </div>
   );
-};
+}; 

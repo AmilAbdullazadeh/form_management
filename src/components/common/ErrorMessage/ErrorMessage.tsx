@@ -12,7 +12,7 @@ interface ErrorMessageProps {
  */
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   if (!message) return null;
-
+  
   return (
     <div className={styles.errorContainer} role="alert">
       <span className={styles.errorIcon} aria-hidden="true">
@@ -21,4 +21,4 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
       <span className={styles.errorText}>{message}</span>
     </div>
   );
-};
+}; 

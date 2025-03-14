@@ -8,8 +8,8 @@ export default function Loading() {
       <div className="header">
         <h1>Form List</h1>
       </div>
-
+      
       <SkeletonFormList />
     </main>
   );
-}
+} 

@@ -2,8 +2,16 @@
 
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { Modal } from './Modal';
-import { ModalConfig } from './types';
+import { Modal, ModalSize } from './Modal';
+
+// Modal configuration type
+export interface ModalConfig {
+  title: string;
+  content: ReactNode;
+  footer?: ReactNode;
+  size?: ModalSize;
+  closeOnOutsideClick?: boolean;
+}
 
 // Modal context type
 interface ModalContextType {
@@ -39,7 +47,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   return (
     <ModalContext.Provider value={{ openModal, closeModal }}>
       {children}
-
+      
       {modalConfig && (
         <Modal
           isOpen={isOpen}
@@ -54,4 +62,4 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       )}
     </ModalContext.Provider>
   );
-};
+}; 

@@ -8,7 +8,7 @@ export default function HomePage() {
       <div style={{ textAlign: 'center', marginTop: '4rem' }}>
         <Skeleton type="title" style={{ margin: '0 auto', width: '50%' }} />
         <Skeleton type="text" size="md" style={{ margin: '1rem auto' }} />
-
+        
         {/* Skeleton cards to indicate content is loading */}
         <div style={{ maxWidth: '600px', margin: '3rem auto' }}>
           <Skeleton type="card" count={2} />
@@ -16,4 +16,4 @@ export default function HomePage() {
       </div>
     </main>
   );
-}
+} 

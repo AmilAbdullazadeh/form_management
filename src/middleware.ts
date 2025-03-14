@@ -7,11 +7,11 @@ export function middleware(request: NextRequest) {
 
   // Define valid paths that should not be redirected
   const validPaths = ['/forms', '/forms/'];
-
+  
   // Check if the path is a valid subpath of /forms
   // This will allow paths like /forms/123 but not /formsasdfasdf
   const isValidFormsSubpath = path.startsWith('/forms/') && path.length > 7;
-
+  
   // Redirect if not a valid forms path
   if (!validPaths.includes(path) && !isValidFormsSubpath) {
     return NextResponse.redirect(new URL('/forms', request.url));
@@ -29,4 +29,4 @@ export const config = {
      */
     '/((?!_next/|api/|favicon.ico).*)',
   ],
-};
+}; 

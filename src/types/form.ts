@@ -1,12 +1,12 @@
 import { Form } from '@/lib/redux/slices/formsSlice';
 
 /**
- * Modal mode enum to identify create or update operations
+ * Modal mode enum to identify create, update, or view operations
  */
 export enum FormModalMode {
   CREATE = 'create',
   UPDATE = 'update',
-  VIEW = 'view',
+  VIEW = 'view'
 }
 
 /**
@@ -38,4 +38,4 @@ export interface FormModalState {
 }
 
 // Re-export Form type from redux slice for convenience
-export type { Form };
+export type { Form }; 

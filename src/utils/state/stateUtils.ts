@@ -94,7 +94,7 @@ export const sortingReducers = {
     action: PayloadAction<{ sortBy: T; sortDirection?: 'asc' | 'desc' }>
   ) => {
     const { sortBy, sortDirection = 'asc' } = action.payload;
-
+    
     // If clicking the same column, toggle direction
     if (state.sortBy === sortBy) {
       state.sortDirection = state.sortDirection === 'asc' ? 'desc' : 'asc';
@@ -108,4 +108,4 @@ export const sortingReducers = {
     state.sortBy = null;
     state.sortDirection = 'asc';
   },
-};
+}; 

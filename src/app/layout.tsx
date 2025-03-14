@@ -25,9 +25,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-          <ModalProvider>{children}</ModalProvider>
+          <ModalProvider>
+            {children}
+          </ModalProvider>
         </Providers>
       </body>
     </html>
   );
-}
+} 

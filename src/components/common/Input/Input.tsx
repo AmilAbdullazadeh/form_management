@@ -20,46 +20,53 @@ export type InputProps = InputHTMLAttributes<HTMLInputElement> & InputConfig;
  * Reusable Input component with simplified props
  */
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ label, error, fullWidth = false, className = '', containerClassName = '', ...props }, ref) => {
+  ({ 
+    label, 
+    error, 
+    fullWidth = false, 
+    className = '', 
+    containerClassName = '',
+    ...props 
+  }, ref) => {
     // Generate input classes based on props
     const getInputClasses = () => {
       const classes = [styles.input];
-
+      
       // Add error class if needed
       if (error) {
         classes.push(styles.error);
       }
-
+      
       // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
-
+      
       // Add custom class if provided
       if (className) {
         classes.push(className);
       }
-
+      
       return classes.join(' ');
     };
-
+    
     // Generate container classes based on props
     const getContainerClasses = () => {
       const classes = [styles.formGroup];
-
+      
       // Add full width class if needed
       if (fullWidth) {
         classes.push(styles.full);
       }
-
+      
       // Add custom class if provided
       if (containerClassName) {
         classes.push(containerClassName);
       }
-
+      
       return classes.join(' ');
     };
-
+    
     return (
       <div className={getContainerClasses()}>
         {label && (
@@ -81,3 +88,4 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
 // Add display name for React DevTools
 Input.displayName = 'Input';
+ 

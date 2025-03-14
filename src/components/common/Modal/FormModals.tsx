@@ -39,10 +39,14 @@ export const useFormModal = () => {
       size,
       footer: (
         <>
-          <Button variant="secondary" onClick={closeModal} disabled={isSubmitting}>
+          <Button 
+            variant="secondary" 
+            onClick={closeModal} 
+            disabled={isSubmitting}
+          >
             {cancelLabel}
           </Button>
-          <Button
+          <Button 
             onClick={async () => {
               try {
                 await onSubmit();
@@ -50,7 +54,7 @@ export const useFormModal = () => {
               } catch (error) {
                 console.error('Form submission error:', error);
               }
-            }}
+            }} 
             disabled={isSubmitting}
           >
             {isSubmitting ? 'Processing...' : submitLabel}
@@ -116,11 +120,15 @@ export const useFormModal = () => {
       size: 'sm',
       footer: (
         <>
-          <Button variant="secondary" onClick={closeModal} disabled={isDeleting}>
+          <Button 
+            variant="secondary" 
+            onClick={closeModal} 
+            disabled={isDeleting}
+          >
             Cancel
           </Button>
-          <Button
-            variant="danger"
+          <Button 
+            variant="danger" 
             onClick={async () => {
               try {
                 await onDelete();
@@ -128,7 +136,7 @@ export const useFormModal = () => {
               } catch (error) {
                 console.error('Delete error:', error);
               }
-            }}
+            }} 
             disabled={isDeleting}
           >
             {isDeleting ? 'Deleting...' : 'Delete'}
@@ -145,4 +153,4 @@ export const useFormModal = () => {
     openDeleteModal,
     closeModal,
   };
-};
+}; 

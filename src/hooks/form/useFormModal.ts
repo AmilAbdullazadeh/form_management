@@ -10,65 +10,66 @@ import { validateFormValues } from '@/utils/validation';
 
 /**
  * Custom hook for form modal logic
- *
+ * 
  * @param props - The modal props
  * @returns Form state, handlers, and UI elements for the form modal
  */
-export const useFormModal = ({
-  isOpen,
-  onClose,
+export const useFormModal = ({ 
+  isOpen, 
+  onClose, 
   mode = 'create',
-  initialForm = {},
+  initialForm = {} 
 }: FormModalProps) => {
   const dispatch = useAppDispatch();
   const isUpdateMode = mode === 'update';
   const [submitError, setSubmitError] = useState<string | null>(null);
   const formInitialized = useRef(false);
-
+  
   // Handle form submission
-  const handleFormSubmit = useCallback(
-    async (values: FormValues) => {
-      // Clear any previous submit errors
-      setSubmitError(null);
-
-      try {
-        const formData = {
-          title: values.title,
-          description: generateFormDescription(values),
-        };
-
-        if (isUpdateMode && initialForm?.id) {
-          // Update existing form
-          dispatch(
-            updateForm({
-              id: initialForm.id,
-              ...formData,
-            })
-          );
-        } else {
-          // Create new form
-          dispatch(addForm(formData));
-        }
-
-        // Close modal
-        onClose();
-      } catch (error) {
-        console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
-        setSubmitError(FORM_VALIDATION_ERRORS.SUBMIT_ERROR(isUpdateMode));
-        throw error; // Let the form hook handle the error
+  const handleFormSubmit = useCallback(async (values: FormValues) => {
+    // Clear any previous submit errors
+    setSubmitError(null);
+    
+    try {
+      const formData = {
+        title: values.title,
+        description: generateFormDescription(values),
+      };
+      
+      if (isUpdateMode && initialForm?.id) {
+        // Update existing form
+        dispatch(updateForm({
+          id: initialForm.id,
+          ...formData
+        }));
+      } else {
+        // Create new form
+        dispatch(addForm(formData));
       }
-    },
-    [isUpdateMode, initialForm?.id, dispatch, onClose]
-  );
-
+      
+      // Close modal
+      onClose();
+    } catch (error) {
+      console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
+      setSubmitError(FORM_VALIDATION_ERRORS.SUBMIT_ERROR(isUpdateMode));
+      throw error; // Let the form hook handle the error
+    }
+  }, [isUpdateMode, initialForm?.id, dispatch, onClose]);
+  
   // Initialize form with useForm hook
-  const { values, errors, isSubmitting, handleChange, handleSubmit, setValues } =
-    useForm<FormValues>({
-      initialValues: getInitialFormValues(initialForm),
-      onSubmit: handleFormSubmit,
-      validate: validateFormValues,
-    });
-
+  const {
+    values,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+    setValues
+  } = useForm<FormValues>({
+    initialValues: getInitialFormValues(initialForm),
+    onSubmit: handleFormSubmit,
+    validate: validateFormValues
+  });
+  
   // Handle initialForm changes and modal open/close
   useEffect(() => {
     if (isOpen) {
@@ -86,15 +87,8 @@ export const useFormModal = ({
       formInitialized.current = false;
       setSubmitError(null);
     }
-  }, [
-    isOpen,
-    isUpdateMode,
-    initialForm?.id,
-    initialForm?.title,
-    initialForm?.description,
-    setValues,
-  ]);
-
+  }, [isOpen, isUpdateMode, initialForm?.id, initialForm?.title, initialForm?.description, setValues]);
+  
   // Return form state and handlers
   return {
     // Form state
@@ -103,13 +97,13 @@ export const useFormModal = ({
     isSubmitting,
     submitError,
     isUpdateMode,
-
+    
     // Form handlers
     handleChange,
     handleSubmit,
-
+    
     // Helper getters
     modalTitle: isUpdateMode ? 'Update Form' : 'Create Form',
     submitButtonText: isUpdateMode ? 'Save Changes' : 'Create',
   };
-};
+}; 

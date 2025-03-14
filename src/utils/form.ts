@@ -7,12 +7,12 @@ import { FormValues } from '@/types/form';
 const DEFAULT_FORM_VALUES: FormValues = {
   title: '',
   isVisible: true,
-  isReadOnly: false,
+  isReadOnly: false
 };
 
 /**
  * Parse the form description to extract boolean values
- *
+ * 
  * @param description - The form description text
  * @param property - The property to extract (isVisible, isReadOnly)
  * @returns Extracted boolean value
@@ -27,7 +27,7 @@ export const parseDescriptionProperty = (
 
 /**
  * Get initial form values from a form object
- *
+ * 
  * @param form - The form object to extract values from
  * @returns FormValues object with extracted values
  */
@@ -36,10 +36,10 @@ export const getInitialFormValues = (form?: Partial<Form>): FormValues => {
   if (!form?.id) {
     return { ...DEFAULT_FORM_VALUES };
   }
-
+  
   // Extract values from form
   const description = form.description || '';
-
+  
   return {
     title: form.title || '',
     isVisible: parseDescriptionProperty(description, 'isVisible'),
@@ -49,7 +49,7 @@ export const getInitialFormValues = (form?: Partial<Form>): FormValues => {
 
 /**
  * Generate form description from form values
- *
+ * 
  * @param values - The form values to convert to description
  * @returns Generated description string
  */
@@ -71,7 +71,7 @@ export const extractFormValues = (form?: Partial<Form>): FormValues => {
   return {
     title: form.title || '',
     isVisible: parseDescriptionProperty(description, 'isVisible'),
-    isReadOnly: parseDescriptionProperty(description, 'isReadOnly'),
+    isReadOnly: parseDescriptionProperty(description, 'isReadOnly')
   };
 };
 
@@ -83,6 +83,6 @@ export const extractFormValues = (form?: Partial<Form>): FormValues => {
 export const prepareFormData = (values: FormValues) => {
   return {
     title: values.title,
-    description: `Visible: ${values.isVisible}, ReadOnly: ${values.isReadOnly}`,
+    description: `Visible: ${values.isVisible}, ReadOnly: ${values.isReadOnly}`
   };
-};
+}; 
