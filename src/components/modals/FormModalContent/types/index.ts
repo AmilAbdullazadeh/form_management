@@ -2,9 +2,6 @@ import { FormEvent, ChangeEvent } from "react";
 
 import { FieldFormValues, FormField, FormModalMode, FormValues } from "@/types/form";
 
-/**
- * Props for the FormContent component
- */
 export interface FormModalContentProps {
         values: FormValues;
         errors: Record<string, string>;
@@ -16,10 +13,6 @@ export interface FormModalContentProps {
         submitError: string | null;
 }
 
-/**
- * Props for the FormModalRenderer component
- * Extends FormModalContentProps with additional properties needed for the modal
- */
 export interface FormModalRenderProps extends FormModalContentProps {
         isOpen: boolean;
         onClose: () => void;

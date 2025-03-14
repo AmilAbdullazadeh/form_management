@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { FieldsState, FormsState } from "@/types/hook";
 import { FormValues } from '@/types/form';
+import { FieldsState, FormsState } from "@/types/hook";
 
 export const initialFieldsState: FieldsState = {
     fields: [],
@@ -34,9 +34,6 @@ export const initialFieldsState: FieldsState = {
     error: null
   };
   
-  /**
- * Default form values
- */
 export const DEFAULT_FORM_VALUES: FormValues = {
     title: '',
     isVisible: true,

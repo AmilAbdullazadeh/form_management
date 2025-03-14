@@ -7,10 +7,6 @@ import { Button } from '@/components/common/Button';
 import styles from './FieldList.module.scss';
 import { FieldListProps } from './types';
 
-/**
- * Reusable component for displaying and managing a list of form fields
- * Supports adding and deleting fields with proper permissions
- */
 export const FieldList: React.FC<FieldListProps> = ({
   fields,
   isViewOnly,
@@ -19,15 +15,13 @@ export const FieldList: React.FC<FieldListProps> = ({
   addButtonLabel = 'Add Field',
   emptyMessage = 'No fields added yet. Click "Add Field" to add form fields.'
 }) => {
-  // Prevent form submission when clicking the Add Field button
   const handleAddFieldClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     onAddField();
   };
 
-  // Handle delete field button click
   const handleDeleteField = (e: React.MouseEvent, fieldId: string) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (onDeleteField) {
       onDeleteField(fieldId);
     }

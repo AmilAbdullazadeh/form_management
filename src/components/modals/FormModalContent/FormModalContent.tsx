@@ -12,9 +12,6 @@ import { FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form-lab
 import styles from './FormModalContent.module.scss';
 import { FormModalContentProps } from './types';
 
-/**
- * Form Fields List component to display fields in the form
- */
 export const FormFieldsList = ({ 
   fields, 
   isViewOnly, 
@@ -28,13 +25,12 @@ export const FormFieldsList = ({
 }) => {
   // Prevent form submission when clicking the Add Field button
   const handleAddFieldClick = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
-    onAddField();
+    e.preventDefault();
   };
 
   // Handle delete field button click
   const handleDeleteField = (e: React.MouseEvent, fieldId: string) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     if (onDeleteField) {
       onDeleteField(fieldId);
     }
@@ -87,9 +83,6 @@ export const FormFieldsList = ({
   );
 };
 
-/**
- * Form content component to reduce main component size
- */
 export const FormContent = ({ 
   values, 
   errors, 

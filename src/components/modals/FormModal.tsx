@@ -17,17 +17,12 @@ import { validateForm } from '@/utils/validation';
 
 import styles from './FormModal.module.scss';
 
-// Default empty form values
 const DEFAULT_FORM_VALUES: FormValues = {
   title: '',
   isVisible: true,
   isReadOnly: false
 };
 
-/**
- * Reusable modal component for creating or updating forms
- * Handles both create and edit modes with proper state management
- */
 export const FormModal: React.FC<FormModalProps> = ({
   isOpen,
   onClose,
@@ -39,57 +34,46 @@ export const FormModal: React.FC<FormModalProps> = ({
   const [submitError, setSubmitError] = useState<string | null>(null);
   const prevMode = useRef<FormModalMode>(mode);
   const prevFormId = useRef<string | undefined>(initialForm?.id);
-  
-  // Get all existing forms for uniqueness validation
+
   const allForms = useAppSelector(selectAllForms);
   
-  // Extract initial values from the form once using useMemo to prevent recreation on every render
   const initialValues = useMemo(() => {
-    // For create mode or if no initialForm, return default empty values
     if (mode === FormModalMode.CREATE || !initialForm?.id) {
       return { ...DEFAULT_FORM_VALUES };
     }
-    // For update mode, extract values from the form
     return extractFormValues(initialForm);
   }, [mode, initialForm?.id]);
   
   // Check if the form is in view-only mode (either VIEW mode or readonly form in UPDATE mode)
   const isViewOnly = mode === FormModalMode.VIEW || (isUpdateMode && initialValues.isReadOnly);
 
-  // Form validation function that uses the utility
   const validateFormValues = useCallback((values: FormValues) => {
     return validateForm(values, allForms, isUpdateMode ? initialForm?.id : undefined);
   }, [allForms, isUpdateMode, initialForm?.id]);
   
-  // Handle form submission
   const handleFormSubmit = useCallback(async (values: FormValues) => {
-    // Clear any previous submit errors
     setSubmitError(null);
     
     try {
       const formData = prepareFormData(values);
       
       if (isUpdateMode && initialForm?.id) {
-        // Update existing form
         dispatch(updateForm({
           id: initialForm.id,
           ...formData
         }));
       } else {
-        // Create new form
         dispatch(addForm(formData));
       }
       
-      // Close modal
       onClose();
     } catch (error) {
       console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
-      throw error; // Let the form hook handle the error
+      throw error;
     }
   }, [isUpdateMode, initialForm?.id, dispatch, onClose]);
   
-  // Initialize form with useForm hook
   const {
     values,
     errors,

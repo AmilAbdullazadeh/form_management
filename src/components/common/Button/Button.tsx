@@ -4,8 +4,6 @@ import styles from './Button.module.scss';
 import { ButtonProps } from './types';
 
 /**
- * Reusable Button component
- *
  * @param variant - Button style variant
  * @param size - Button size
  * @param isLoading - Whether the button is in loading state
@@ -27,28 +25,22 @@ export const Button: React.FC<ButtonProps> = ({
   const getButtonClasses = () => {
     const classes = [styles.button];
 
-    // Add variant class
     classes.push(styles[variant]);
 
-    // Add size class
     classes.push(styles[size]);
 
-    // Add full width class if needed
     if (fullWidth) {
       classes.push(styles.full);
     }
 
-    // Add loading class if needed
     if (isLoading) {
       classes.push(styles.loading);
     }
 
-    // Add disabled class if needed
     if (props.disabled) {
       classes.push(styles.disabled);
     }
 
-    // Add custom class if provided
     if (className) {
       classes.push(className);
     }

@@ -5,8 +5,7 @@ import { Skeleton } from '../Skeleton';
 import styles from './SkeletonCard.module.scss';
 import { SkeletonCardProps } from './types';
 /**
- * SkeletonCard component for form card loading states
- * Displays a skeleton version of a form card with title, description, and action button
+ * SkeletonCard for form card loading
  */
 export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '', style = {} }) => {
   return (

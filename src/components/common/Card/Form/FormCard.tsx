@@ -3,9 +3,6 @@ import React from 'react';
 import styles from './FormCard.module.scss';
 import { FormCardProps } from './types';
 
-/**
- * FormCard component for displaying form information in a card layout
- */
 export const FormCard: React.FC<FormCardProps> = ({
   title,
   subtitle,

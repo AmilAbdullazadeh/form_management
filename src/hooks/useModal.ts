@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
 
 /**
- * Custom hook for managing modal state
- * 
  * @returns Modal state and handlers
  */
 export function useModal() {

@@ -2,8 +2,8 @@ import React, { forwardRef } from 'react';
 
 import styles from './Checkbox.module.scss';
 import { CheckboxProps } from './types';
+
 /**
- * Reusable Checkbox component
  *
  * @param label - Checkbox label
  * @param error - Error message
@@ -18,12 +18,10 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const getCheckboxClasses = () => {
       const classes = [styles.checkbox];
 
-      // Add error class if needed
       if (error) {
         classes.push(styles.error);
       }
 
-      // Add custom class if provided
       if (className) {
         classes.push(className);
       }
@@ -35,7 +33,6 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     const getContainerClasses = () => {
       const classes = [styles.checkboxGroup];
 
-      // Add custom class if provided
       if (containerClassName) {
         classes.push(containerClassName);
       }
@@ -64,5 +61,4 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   }
 );
 
-// Add display name for React DevTools
 Checkbox.displayName = 'Checkbox';

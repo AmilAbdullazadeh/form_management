@@ -6,26 +6,20 @@ import { FormCardList, SkeletonFormList } from '@/components/common';
 import formStyles from '@/components/common/Card/Form/List/FormCardList.module.scss';
 import { useFormModal } from '@/components/common/Modal/FormModal/FormModal';
 import { FormModal } from '@/components/modals/FormModal/FormModal';
-import { FORM_EMPTY_STATES } from '@/constants/form';
+import { FORM_EMPTY_STATES, FormStates } from '@/constants/form';
 import { FORM_BUTTON_TEXT } from '@/constants/form-labels';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { deleteForm, selectAllForms, selectFormById, selectFormsStatus } from '@/lib/redux/slices/formsSlice';
 import { FormModalMode, FormModalState } from '@/types/form';
 import { parseDescriptionProperty } from '@/utils/form';
 
-/**
- * FormList component - Displays a list of forms using the common FormCardList component
- * All logic is directly included in the component
- */
 export const FormList: React.FC = () => {
   const dispatch = useAppDispatch();
   const { openDeleteModal } = useFormModal();
   
-  // Use selectors to get data from redux store
   const forms = useAppSelector(selectAllForms);
   const formsStatus = useAppSelector(selectFormsStatus);
   
-  // Component state
   const [isLoading, setIsLoading] = useState(true);
   const [modalState, setModalState] = useState<FormModalState>({
     isOpen: false,
@@ -33,16 +27,13 @@ export const FormList: React.FC = () => {
     selectedFormId: null
   });
   
-  // Get selected form using the memoized selector
   const selectedForm = useAppSelector(
     state => modalState.selectedFormId 
       ? selectFormById(state, modalState.selectedFormId) 
       : undefined
   );
   
-  // Simulate loading state for demonstration
   useEffect(() => {
-    // Simulate API loading delay
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -50,7 +41,6 @@ export const FormList: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
   
-  // Handle opening create modal
   const handleOpenCreateModal = useCallback(() => {
     setModalState({
       isOpen: true,
@@ -59,11 +49,9 @@ export const FormList: React.FC = () => {
     });
   }, []);
   
-  // Handle opening update modal or view details modal
   const handleEdit = useCallback((id: string) => {
     const form = forms.find(f => f.id === id);
     
-    // Move the state update to useEffect to avoid setting state during render
     if (form) {
       const isReadOnly = parseDescriptionProperty(form.description || '', 'isReadOnly');
       
@@ -75,9 +63,7 @@ export const FormList: React.FC = () => {
     }
   }, [forms]);
   
-  // Handle form deletion - updated to use the modal confirmation
   const handleDelete = useCallback((id: string) => {
-    // Find the form to get its title
     const formToDelete = forms.find(form => form.id === id);
     
     if (formToDelete) {
@@ -91,7 +77,6 @@ export const FormList: React.FC = () => {
     }
   }, [dispatch, forms, openDeleteModal]);
   
-  // Handle modal close
   const handleCloseModal = useCallback(() => {
     setModalState(prev => ({
       ...prev,
@@ -99,10 +84,8 @@ export const FormList: React.FC = () => {
     }));
   }, []);
   
-  // Determine if we should show skeleton based on loading state or API status
-  const showSkeleton = isLoading || formsStatus === 'loading';
+  const showSkeleton = isLoading || formsStatus === FormStates.LOADING;
   
-  // Render loading skeleton or form list
   const renderContent = () => {
     if (showSkeleton) {
       return (

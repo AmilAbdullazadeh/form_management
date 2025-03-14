@@ -24,16 +24,12 @@ const FIELD_TYPE_OPTIONS = [
   { value: FieldType.EMAIL, label: 'Email' }
 ];
 
-/**
- * Field Modal component for adding or editing form fields
- */
 export const FieldModal: React.FC<FieldModalProps> = ({
   isOpen,
   onClose,
   onSave,
   formId
 }) => {
-  // Use the field form hook
   const {
     values,
     errors,
@@ -50,7 +46,7 @@ export const FieldModal: React.FC<FieldModalProps> = ({
     onClose();
   }, [onClose, resetForm]);
 
-  // Modal footer with action buttons
+  // Action buttons
   const modalFooter = (
     <>
       <Button 

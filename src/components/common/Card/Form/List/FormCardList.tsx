@@ -5,9 +5,6 @@ import { FormItemCard } from '../Item/FormItemCard';
 import styles from './FormCardList.module.scss';
 import { FormCardListProps } from './types';
 
-/**
- * FormCardList component for displaying a list of form cards
- */
 export const FormCardList: React.FC<FormCardListProps> = ({
   forms,
   onEdit,

@@ -6,10 +6,6 @@ export interface ModalState {
   selectedFormId: string | null;
 }
 
-/**
- * Field type enum for different form field types
- * These values should match the corresponding values in FieldTypes constants
- */
 export enum FieldType {
   TEXT = 'text',
   CHECKBOX = 'checkbox',
@@ -21,9 +17,6 @@ export enum FieldType {
   EMAIL = 'email'
 }
 
-/**
- * Field interface for form fields
- */
 export interface FormField {
   id: string;
   formId: string;
@@ -35,9 +28,6 @@ export interface FormField {
   defaultValue?: string | boolean | number;
 }
 
-/**
- * Field values for the field form
- */
 export interface FieldFormValues {
   type: FieldType;
   label: string;
@@ -47,19 +37,12 @@ export interface FieldFormValues {
   defaultValue?: string;
 }
 
-/**
- * Modal mode enum to identify create, update, or view operations
- * These values should match the corresponding values in FormOperations constants
- */
 export enum FormModalMode {
   CREATE = 'creating',
   UPDATE = 'updating',
   VIEW = 'viewing'
 }
 
-/**
- * Form modal props interface
- */
 export interface FormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -67,27 +50,18 @@ export interface FormModalProps {
   initialForm?: Partial<Form>;
 }
 
-/**
- * Form value structure for the form inputs
- */
 export interface FormValues {
   title: string;
   isVisible: boolean;
   isReadOnly: boolean;
 }
 
-/**
- * Modal state interface for the FormList component
- */
 export interface FormModalState {
   isOpen: boolean;
   mode: FormModalMode;
   selectedFormId: string | null;
 }
 
-/**
- * Field modal props interface
- */
 export interface FieldModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -95,5 +69,4 @@ export interface FieldModalProps {
   onSave: (field: FieldFormValues) => void;
 }
 
-// Re-export Form type from redux slice for convenience
 export type { Form }; 

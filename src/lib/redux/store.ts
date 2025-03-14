@@ -8,7 +8,6 @@ export const store = configureStore({
     forms: formsReducer,
     fields: fieldsReducer,
   },
-  // Add middleware to check for serializability in development
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
@@ -22,6 +21,5 @@ export const store = configureStore({
     }),
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch; 

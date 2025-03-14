@@ -12,9 +12,6 @@ import { FormContent } from './FormModalContent';
 import styles from './FormModalContent.module.scss';
 import { FormModalRenderProps } from './types';
 
-/**
- * Renderer component for the form modal to reduce main component size
- */
 export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
   isOpen,
   onClose,
@@ -82,7 +79,6 @@ export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
         </form>
       </div>
       
-      {/* Field Modal - show in both create and update modes */}
       <FieldModal
         isOpen={isFieldModalOpen}
         onClose={handleCloseFieldModal}

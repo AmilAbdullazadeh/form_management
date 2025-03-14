@@ -1,8 +1,7 @@
 import { ReactNode } from "react";
 
-import { ModalSize } from "../../Modal";
+import { ModalSize } from "../../types";
 
-// Modal configuration type
 export interface ModalConfig {
     title: string;
     content: ReactNode;
@@ -11,7 +10,6 @@ export interface ModalConfig {
     closeOnOutsideClick?: boolean;
   }
   
-  // Modal context type
 export interface ModalContextType {
     openModal: (config: ModalConfig) => void;
     closeModal: () => void;

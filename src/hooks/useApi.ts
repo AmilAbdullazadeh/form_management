@@ -1,9 +1,8 @@
 import { useState, useCallback } from 'react';
 
 import { ApiOptions, ApiState } from '@/types/hook';
+
 /**
- * Custom hook for handling API requests
- * 
  * @param initialData Initial data state
  * @param options API options including success and error callbacks
  * @returns API state and request handlers
@@ -27,7 +26,6 @@ export function useApi<T>(initialData: T | null = null, options: ApiOptions = {}
       try {
         const response = await apiCall();
         
-        // Transform response if needed
         const transformedData = transformResponse
           ? transformResponse(response)
           : (response as unknown as T);
