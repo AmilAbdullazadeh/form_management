@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import fieldsReducer from './slices/fieldsSlice';
 import formsReducer from './slices/formsSlice';
 
 export const store = configureStore({
   reducer: {
     forms: formsReducer,
+    fields: fieldsReducer,
   },
   // Add middleware to check for serializability in development
   middleware: (getDefaultMiddleware) =>

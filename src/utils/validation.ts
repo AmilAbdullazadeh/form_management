@@ -3,22 +3,6 @@ import { Form } from '@/lib/redux/slices/formsSlice';
 import { FormValues } from '@/types/form';
 
 /**
- * Validate form values for the FormModal component
- * 
- * @param values - The form values to validate
- * @returns An object with validation errors, if any
- */
-export const validateFormValues = (values: FormValues): Partial<Record<keyof FormValues, string>> => {
-  const errors: Partial<Record<keyof FormValues, string>> = {};
-  
-  if (!values.title.trim()) {
-    errors.title = FORM_VALIDATION_ERRORS.TITLE_REQUIRED;
-  }
-  
-  return errors;
-};
-
-/**
  * Form validation-related utility functions
  */
 
@@ -78,36 +62,27 @@ export const validateForm = (
 ): Partial<Record<keyof FormValues, string>> => {
   const errors: Partial<Record<keyof FormValues, string>> = {};
   
-  // Skip validation if the title is empty
-  if (!values.title.trim()) {
+  // Check if title is empty
+  if (isFormNameEmpty(values.title)) {
     errors.title = FORM_VALIDATION_ERRORS.TITLE_REQUIRED;
     return errors;
   }
   
-  // Only validate uppercase first letter, format and uniqueness if there's a title
-  if (values.title.trim()) {
-    // Check if title starts with an uppercase letter
-    if (!/^[A-Z]/.test(values.title)) {
-      errors.title = FORM_VALIDATION_ERRORS.TITLE_CAPITALIZATION;
-      return errors;
-    }
-    
-    // Check if title contains only English alphabetic characters and numbers
-    if (!/^[A-Za-z0-9]+$/.test(values.title)) {
-      errors.title = FORM_VALIDATION_ERRORS.TITLE_FORMAT;
-      return errors;
-    }
-    
-    // Check for uniqueness
-    const isTitleUnique = !forms.some(form => 
-      form.title === values.title && 
-      // Skip checking against the current form in update mode
-      !(currentFormId && currentFormId === form.id)
-    );
-    
-    if (!isTitleUnique) {
-      errors.title = FORM_VALIDATION_ERRORS.TITLE_UNIQUE;
-    }
+  // Check if title starts with an uppercase letter
+  if (!isFormNameCapitalized(values.title)) {
+    errors.title = FORM_VALIDATION_ERRORS.TITLE_CAPITALIZATION;
+    return errors;
+  }
+  
+  // Check if title contains only English alphabetic characters and numbers
+  if (!isFormNameValidFormat(values.title)) {
+    errors.title = FORM_VALIDATION_ERRORS.TITLE_FORMAT;
+    return errors;
+  }
+  
+  // Check for uniqueness
+  if (!isFormNameUnique(values.title, forms, currentFormId)) {
+    errors.title = FORM_VALIDATION_ERRORS.TITLE_UNIQUE;
   }
   
   return errors;

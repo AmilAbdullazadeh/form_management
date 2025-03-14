@@ -4,9 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { FormCardList, SkeletonFormList } from '@/components/common';
 import formStyles from '@/components/common/Card/Form/List/FormCardList.module.scss';
-import { useFormModal } from '@/components/common/Modal/FormModals';
-import { FormModal } from '@/components/modals/FormModal';
-import { FORM_EMPTY_STATES, FORM_BUTTON_TEXT } from '@/constants/form';
+import { useFormModal } from '@/components/common/Modal/FormModal/FormModal';
+import { FormModal } from '@/components/modals/FormModal/FormModal';
+import { FORM_EMPTY_STATES } from '@/constants/form';
+import { FORM_BUTTON_TEXT } from '@/constants/form-labels';
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
 import { deleteForm, selectAllForms, selectFormById, selectFormsStatus } from '@/lib/redux/slices/formsSlice';
 import { FormModalMode, FormModalState } from '@/types/form';
@@ -61,13 +62,17 @@ export const FormList: React.FC = () => {
   // Handle opening update modal or view details modal
   const handleEdit = useCallback((id: string) => {
     const form = forms.find(f => f.id === id);
-    const isReadOnly = form ? parseDescriptionProperty(form.description || '', 'isReadOnly') : false;
     
-    setModalState({
-      isOpen: true,
-      mode: isReadOnly ? FormModalMode.VIEW : FormModalMode.UPDATE,
-      selectedFormId: id
-    });
+    // Move the state update to useEffect to avoid setting state during render
+    if (form) {
+      const isReadOnly = parseDescriptionProperty(form.description || '', 'isReadOnly');
+      
+      setModalState({
+        isOpen: true,
+        mode: isReadOnly ? FormModalMode.VIEW : FormModalMode.UPDATE,
+        selectedFormId: id
+      });
+    }
   }, [forms]);
   
   // Handle form deletion - updated to use the modal confirmation

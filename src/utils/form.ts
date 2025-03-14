@@ -4,7 +4,7 @@ import { FormValues } from '@/types/form';
 /**
  * Default form values
  */
-const DEFAULT_FORM_VALUES: FormValues = {
+export const DEFAULT_FORM_VALUES: FormValues = {
   title: '',
   isVisible: true,
   isReadOnly: false
@@ -48,16 +48,6 @@ export const getInitialFormValues = (form?: Partial<Form>): FormValues => {
 };
 
 /**
- * Generate form description from form values
- * 
- * @param values - The form values to convert to description
- * @returns Generated description string
- */
-export const generateFormDescription = (values: FormValues): string => {
-  return `Visible: ${values.isVisible}, ReadOnly: ${values.isReadOnly}`;
-};
-
-/**
  * Extract form values from a Form object
  * @param form The form to extract values from
  * @returns The form values extracted from the form
@@ -83,6 +73,15 @@ export const extractFormValues = (form?: Partial<Form>): FormValues => {
 export const prepareFormData = (values: FormValues) => {
   return {
     title: values.title,
-    description: `Visible: ${values.isVisible}, ReadOnly: ${values.isReadOnly}`
+    description: generateFormDescription(values)
   };
+};
+
+/**
+ * Generate form description from form values
+ * @param values The form values to convert to description
+ * @returns Generated description string
+ */
+export const generateFormDescription = (values: FormValues): string => {
+  return `Visible: ${values.isVisible}, ReadOnly: ${values.isReadOnly}`;
 }; 

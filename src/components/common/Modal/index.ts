@@ -1,5 +1,5 @@
 export { Modal } from './Modal';
 export type { ModalProps, ModalSize } from './Modal';
-export { ModalProvider, useModal } from './ModalContext';
-export type { ModalConfig } from './ModalContext';
-export { useFormModal } from './FormModals';
+export { ModalProvider, useModal } from './ModalContent/ModalContext';
+export type { ModalConfig } from './ModalContent/ModalContext';
+export { useFormModal } from './FormModal/FormModal';

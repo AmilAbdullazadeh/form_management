@@ -2,7 +2,7 @@
 
 import React, { createContext, ReactNode, useContext, useState } from 'react';
 
-import { Modal, ModalSize } from './Modal';
+import { Modal, ModalSize } from '../Modal';
 
 // Modal configuration type
 export interface ModalConfig {
