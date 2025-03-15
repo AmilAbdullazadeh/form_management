@@ -1,12 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { FORM_MODAL_TEXT, FORM_VALIDATION_ERRORS } from '@/constants/form';
+import { FORM_MODAL_TEXT, FORM_VALIDATION_ERRORS, FormOperations } from '@/constants/form';
 import { useForm } from '@/hooks/form/useForm';
-import { useAppDispatch } from '@/lib/redux/hooks';
-import { addForm, updateForm } from '@/lib/redux/slices/formsSlice';
+import { useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
+import { Form } from '@/types/api';
 import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
-import { generateFormDescription, getInitialFormValues } from '@/utils/form';
-import { validateForm } from '@/utils/validation';
 
 /**
  * @param props - The modal props
@@ -18,7 +16,8 @@ export const useFormModal = ({
   mode = FormModalMode.CREATE,
   initialForm = {} 
 }: FormModalProps) => {
-  const dispatch = useAppDispatch();
+  const [createForm] = useCreateFormMutation();
+  const [updateForm] = useUpdateFormMutation();
   const isUpdateMode = mode === FormModalMode.UPDATE;
   const [submitError, setSubmitError] = useState<string | null>(null);
   const formInitialized = useRef(false);
@@ -28,26 +27,24 @@ export const useFormModal = ({
     
     try {
       const formData = {
-        title: values.title,
-        description: generateFormDescription(values),
+        name: values.title,
+        isVisible: values.isVisible,
+        isReadOnly: values.isReadOnly,
+        fields: initialForm.fields || []
       };
       
-      if (isUpdateMode && initialForm?.id) {
-        dispatch(updateForm({
-          id: initialForm.id,
-          ...formData
-        }));
+      if (isUpdateMode && initialForm?._id) {
+        await updateForm({ ...formData, _id: initialForm._id } as Form).unwrap();
       } else {
-        dispatch(addForm(formData));
+        await createForm(formData as Omit<Form, '_id'>).unwrap();
       }
       
       onClose();
     } catch (error) {
-      console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
+      console.error(`Error ${isUpdateMode ? FormOperations.UPDATING : FormOperations.CREATING} form:`, error);
       setSubmitError(FORM_VALIDATION_ERRORS.SUBMIT_ERROR(isUpdateMode));
-      throw error;
     }
-  }, [isUpdateMode, initialForm?.id, dispatch, onClose]);
+  }, [isUpdateMode, initialForm, createForm, updateForm, onClose]);
   
   const {
     values,
@@ -57,27 +54,40 @@ export const useFormModal = ({
     handleSubmit,
     setValues
   } = useForm<FormValues>({
-    initialValues: getInitialFormValues(initialForm),
+    initialValues: {
+      title: initialForm?.name || '',
+      isVisible: initialForm?.isVisible ?? true,
+      isReadOnly: initialForm?.isReadOnly ?? false
+    },
     onSubmit: handleFormSubmit,
-    validate: (values: FormValues) => validateForm(values, forms, currentFormId)
+    validate: (values: FormValues) => {
+      const errors: Partial<Record<keyof FormValues, string>> = {};
+      
+      if (!values.title.trim()) {
+        errors.title = 'Form name is required';
+      }
+      
+      return errors;
+    }
   });
   
   useEffect(() => {
     if (isOpen) {
       // When modal opens or initialForm changes, update form values
-      if (isUpdateMode && initialForm?.id && !formInitialized.current) {
-        const values = getInitialFormValues(initialForm);
-        setValues(values);
+      if (initialForm?._id && !formInitialized.current) {
+        setValues({
+          title: initialForm?.name || '',
+          isVisible: initialForm?.isVisible ?? true,
+          isReadOnly: initialForm?.isReadOnly ?? false
+        });
         formInitialized.current = true;
-      } else if (!isUpdateMode) {
-        setValues(getInitialFormValues());
       }
     } else {
       // When modal closes, reset the initialization flag
       formInitialized.current = false;
       setSubmitError(null);
     }
-  }, [isOpen, isUpdateMode, initialForm?.id, initialForm?.title, initialForm?.description, setValues]);
+  }, [isOpen, initialForm, setValues]);
   
   return {
     values,

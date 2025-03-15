@@ -1,10 +1,10 @@
-import { FormModalMode } from '@/components/modals/FormModalContent/types';
+import { FormModalMode } from '@/types/form';
 
 export const  FORM_VALIDATION_ERRORS = {
-  TITLE_REQUIRED: 'Form name is required',
-  TITLE_UNIQUE: 'Form name must be unique',
-  TITLE_FORMAT: 'Form name must contain only English letters and numbers',
-  TITLE_CAPITALIZATION: 'Form name must start with an uppercase letter',
+  NAME_REQUIRED: 'Form name is required',
+  NAME_UNIQUE: 'Form name must be unique',
+  NAME_FORMAT: 'Form name must contain only English letters and numbers',
+  NAME_CAPITALIZATION: 'Form name must start with an uppercase letter',
   SUBMIT_ERROR: (isUpdateMode: boolean) => isUpdateMode ? 'Failed to update form. Please try again.' : 'Failed to create form. Please try again.'
 };
 
@@ -48,7 +48,7 @@ export const FORM_MODAL_TEXT = {
 };
 
 export const FORM_DEFAULT_VALUES = {
-  title: '',
+  name: '',
   isVisible: true,
   isReadOnly: false
 };
@@ -63,7 +63,7 @@ export const FORM_EMPTY_STATES = {
 }; 
 
 export const FormProperties = {
-  TITLE: 'title',
+  NAME: 'name',
   IS_VISIBLE: 'isVisible',
   IS_READ_ONLY: 'isReadOnly'
 };

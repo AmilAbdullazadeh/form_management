@@ -1,4 +1,4 @@
-import { FormField } from "@/lib/redux/slices/apiSlice";
+import { FormField } from "@/types/api";
 
 export interface FieldListProps {
     fields: FormField[];

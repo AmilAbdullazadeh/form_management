@@ -2,12 +2,15 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { FormModalMode, FormValues } from '@/components/modals/FormModalContent/types';
+import { FormValues } from '@/components/modals/FormModalContent/types';
 import { FORM_SUBMIT_ERRORS, FormOperations } from '@/constants/form';
 import { useForm } from '@/hooks/form/useForm';
 import { useFormMode } from '@/hooks/useFormMode';
 import { useModalState } from '@/hooks/useModalState';
-import { Form, FormField, useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
+import { useCreateFormMutation, useGetFormsQuery, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
+import { Form, FormField } from '@/types/api';
+import { FormModalMode } from '@/types/form';
+import { validateFormName } from '@/utils/validation';
 
 import { FormModalRenderer } from '../FormModalContent/FormModalRenderer';
 
@@ -36,8 +39,9 @@ export const FormModal: React.FC<FormModalProps> = ({
   mode = FormModalMode.CREATE,
   initialForm
 }) => {
-  const [createForm] = useCreateFormMutation();
-  const [updateForm] = useUpdateFormMutation();
+  const { data: forms = [] } = useGetFormsQuery();
+  const [createForm, { isLoading: isCreating }] = useCreateFormMutation();
+  const [updateForm, { isLoading: isUpdating }] = useUpdateFormMutation();
   const [fields, setFields] = useState<FormField[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   
@@ -74,13 +78,20 @@ export const FormModal: React.FC<FormModalProps> = ({
     (values: FormValues) => {
       const errors: Partial<Record<keyof FormValues, string>> = {};
       
-      if (!values.name.trim()) {
-        errors.name = 'Form name is required';
+      // Validate form name
+      const nameValidation = validateFormName(
+        values.name, 
+        forms, 
+        isUpdateMode ? initialForm?._id : undefined
+      );
+      
+      if (!nameValidation.isValid && nameValidation.error) {
+        errors.name = nameValidation.error;
       }
       
       return errors;
     },
-    []
+    [forms, isUpdateMode, initialForm?._id]
   );
   
   const handleFormSubmit = useCallback(async (values: FormValues) => {
@@ -102,7 +113,6 @@ export const FormModal: React.FC<FormModalProps> = ({
     } catch (error) {
       console.error(`Error ${isUpdateMode ? FormOperations.UPDATING : FormOperations.CREATING} form:`, error);
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
-      throw error;
     }
   }, [isUpdateMode, initialForm, createForm, updateForm, onClose, fields]);
   
@@ -154,7 +164,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       onClose={handleModalClose}
       mode={mode}
       isViewOnly={isViewOnly}
-      isSubmitting={isSubmitting}
+      isSubmitting={isSubmitting || isCreating || isUpdating}
       values={values}
       errors={errors}
       formFields={fields}

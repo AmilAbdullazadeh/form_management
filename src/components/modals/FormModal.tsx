@@ -9,16 +9,14 @@ import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form';
 import { useForm } from '@/hooks/form/useForm';
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { addForm, selectAllForms, updateForm } from '@/lib/redux/slices/formsSlice';
+import { useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
+import { Form } from '@/types/api';
 import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
-import { extractFormValues, prepareFormData } from '@/utils/form';
-import { validateForm } from '@/utils/validation';
 
 import styles from './FormModal.module.scss';
 
 const DEFAULT_FORM_VALUES: FormValues = {
-  title: '',
+  name: '',
   isVisible: true,
   isReadOnly: false
 };
@@ -29,50 +27,60 @@ export const FormModal: React.FC<FormModalProps> = ({
   mode = FormModalMode.CREATE,
   initialForm = {}
 }) => {
-  const dispatch = useAppDispatch();
+  const [createForm] = useCreateFormMutation();
+  const [updateForm] = useUpdateFormMutation();
   const isUpdateMode = mode === FormModalMode.UPDATE;
   const [submitError, setSubmitError] = useState<string | null>(null);
   const prevMode = useRef<FormModalMode>(mode);
-  const prevFormId = useRef<string | undefined>(initialForm?.id);
-
-  const allForms = useAppSelector(selectAllForms);
+  const prevFormId = useRef<string | undefined>(initialForm?._id);
   
   const initialValues = useMemo(() => {
-    if (mode === FormModalMode.CREATE || !initialForm?.id) {
+    if (mode === FormModalMode.CREATE || !initialForm?._id) {
       return { ...DEFAULT_FORM_VALUES };
     }
-    return extractFormValues(initialForm);
-  }, [mode, initialForm?.id]);
+    return {
+      name: initialForm.name || '',
+      isVisible: initialForm.isVisible ?? true,
+      isReadOnly: initialForm.isReadOnly ?? false
+    };
+  }, [mode, initialForm]);
   
   // Check if the form is in view-only mode (either VIEW mode or readonly form in UPDATE mode)
   const isViewOnly = mode === FormModalMode.VIEW || (isUpdateMode && initialValues.isReadOnly);
 
   const validateFormValues = useCallback((values: FormValues) => {
-    return validateForm(values, allForms, isUpdateMode ? initialForm?.id : undefined);
-  }, [allForms, isUpdateMode, initialForm?.id]);
+    const errors: Partial<Record<keyof FormValues, string>> = {};
+    
+    if (!values.name.trim()) {
+      errors.name = 'Form name is required';
+    }
+    
+    return errors;
+  }, []);
   
   const handleFormSubmit = useCallback(async (values: FormValues) => {
     setSubmitError(null);
     
     try {
-      const formData = prepareFormData(values);
+      const formData = {
+        name: values.name,
+        isVisible: values.isVisible,
+        isReadOnly: values.isReadOnly,
+        fields: initialForm.fields || []
+      };
       
-      if (isUpdateMode && initialForm?.id) {
-        dispatch(updateForm({
-          id: initialForm.id,
-          ...formData
-        }));
+      if (isUpdateMode && initialForm?._id) {
+        await updateForm({ ...formData, _id: initialForm._id } as Form).unwrap();
       } else {
-        dispatch(addForm(formData));
+        await createForm(formData as Omit<Form, '_id'>).unwrap();
       }
       
       onClose();
     } catch (error) {
       console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
-      throw error;
     }
-  }, [isUpdateMode, initialForm?.id, dispatch, onClose]);
+  }, [isUpdateMode, initialForm, createForm, updateForm, onClose]);
   
   const {
     values,
@@ -104,21 +112,25 @@ export const FormModal: React.FC<FormModalProps> = ({
     }
 
     const modeChanged = prevMode.current !== mode;
-    const formIdChanged = prevFormId.current !== initialForm?.id;
+    const formIdChanged = prevFormId.current !== initialForm?._id;
     
     // Only update if there's a relevant change
     if (modeChanged || formIdChanged) {
       prevMode.current = mode;
-      prevFormId.current = initialForm?.id;
+      prevFormId.current = initialForm?._id;
       setSubmitError(null);
       
       if (mode === FormModalMode.CREATE) {
         setValues({ ...DEFAULT_FORM_VALUES });
-      } else if (mode === FormModalMode.UPDATE && initialForm?.id) {
-        setValues(extractFormValues(initialForm));
+      } else if (mode === FormModalMode.UPDATE && initialForm?._id) {
+        setValues({
+          name: initialForm.name || '',
+          isVisible: initialForm.isVisible ?? true,
+          isReadOnly: initialForm.isReadOnly ?? false
+        });
       }
     }
-  }, [isOpen, mode, initialForm?.id, setValues, resetForm]);
+  }, [isOpen, mode, initialForm, setValues, resetForm]);
   
   // Modal title and submit button text based on mode
   const modalTitle = FORM_MODAL_TEXT[mode].TITLE;
@@ -157,13 +169,13 @@ export const FormModal: React.FC<FormModalProps> = ({
         <form id="form-modal" onSubmit={handleSubmit} noValidate>
           <div className={styles.formGroup}>
             <Input
-              id="title"
-              name="title"
+              id="name"
+              name="name"
               label={FORM_FIELD_LABELS.FORM_NAME}
-              value={values.title}
+              value={values.name}
               onChange={handleChange}
               placeholder={FORM_FIELD_PLACEHOLDERS.FORM_NAME}
-              error={errors.title}
+              error={errors.name}
               fullWidth
               required
               autoFocus

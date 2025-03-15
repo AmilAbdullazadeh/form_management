@@ -7,48 +7,46 @@ import { Checkbox } from '@/components/common/Checkbox';
 import { Input } from '@/components/common/Input';
 import { Modal } from '@/components/common/Modal';
 import { Select } from '@/components/common/Select';
-import { useFieldForm, FieldFormValues } from '@/hooks/form/useFieldForm';
+import { useFieldForm } from '@/hooks/form/useFieldForm';
+import { FormField } from '@/types/api';
 
 import styles from './FieldModal.module.scss';
 
-// Field type options for the dropdown
 const FIELD_TYPE_OPTIONS = [
   { value: 'text', label: 'Text Input' },
-  { value: 'checkbox', label: 'Checkbox' },
-  { value: 'dropdown', label: 'Dropdown' },
-  { value: 'radio', label: 'Radio Buttons' },
-  { value: 'textarea', label: 'Text Area' },
   { value: 'number', label: 'Number' },
+  { value: 'email', label: 'Email' },
   { value: 'date', label: 'Date' },
-  { value: 'email', label: 'Email' }
+  { value: 'checkbox', label: 'Checkbox' },
+  { value: 'select', label: 'Select' }
 ];
 
 export interface FieldModalProps {
   isOpen: boolean;
   onClose: () => void;
-  formId?: string;
-  onSave: (field: FieldFormValues) => void;
+  onSave: (field: FormField) => void;
+  existingFields?: FormField[];
 }
 
 export const FieldModal: React.FC<FieldModalProps> = ({
   isOpen,
   onClose,
-  onSave
+  onSave,
+  existingFields = []
 }) => {
   const { 
     values, 
     errors, 
-    isSubmitting, 
-    showOptionsField,
+    isSubmitting,
     handleChange, 
     handleSubmit,
     resetForm
   } = useFieldForm({
     onSave,
-    onClose
+    onClose,
+    existingFields
   });
   
-  // Reset form when modal closes
   const handleCloseModal = useCallback(() => {
     resetForm();
     onClose();
@@ -84,14 +82,13 @@ export const FieldModal: React.FC<FieldModalProps> = ({
       <form id="field-form" onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.formGroup}>
           <Input
-            id="label"
-            name="label"
-            label="Field Label"
-            placeholder="Enter a label for this field"
-            value={values.label}
+            id="name"
+            name="name"
+            label="Field Name"
+            placeholder="Enter a name for this field"
+            value={values.name}
             onChange={handleChange}
-            error={errors.label}
-            required
+            error={errors.name}
             autoFocus
           />
         </div>
@@ -109,39 +106,12 @@ export const FieldModal: React.FC<FieldModalProps> = ({
           />
         </div>
         
-        {showOptionsField && (
-          <div className={styles.formGroup}>
-            <Input
-              id="options"
-              name="options"
-              label="Options"
-              placeholder="Enter options separated by commas (e.g., 'Option 1, Option 2, Option 3')"
-              value={values.options}
-              onChange={handleChange}
-              error={errors.options}
-              required
-            />
-          </div>
-        )}
-        
-        <div className={styles.formGroup}>
-          <Input
-            id="placeholder"
-            name="placeholder"
-            label="Placeholder Text"
-            placeholder="Enter placeholder text"
-            value={values.placeholder}
-            onChange={handleChange}
-            error={errors.placeholder}
-          />
-        </div>
-        
         <div className={styles.formGroup}>
           <Checkbox
-            id="required"
-            name="required"
+            id="isRequired"
+            name="isRequired"
             label="Required Field"
-            checked={values.required}
+            checked={values.isRequired}
             onChange={handleChange}
           />
         </div>

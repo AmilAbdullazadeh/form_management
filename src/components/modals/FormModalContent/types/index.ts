@@ -1,13 +1,7 @@
 import { FormEvent, ChangeEvent } from "react";
 
-import { FieldFormValues } from "@/hooks/form/useFieldForm";
-import { FormField } from "@/lib/redux/slices/apiSlice";
-
-export enum FormModalMode {
-  CREATE = 'creating',
-  UPDATE = 'updating',
-  VIEW = 'viewing'
-}
+import { FormField } from "@/types/api";
+import { FormModalMode } from "@/types/form";
 
 export interface FormValues {
   name: string;
@@ -35,6 +29,6 @@ export interface FormModalRenderProps extends FormModalContentProps {
   handleSubmit: (e: FormEvent) => void;
   isFieldModalOpen: boolean;
   handleCloseFieldModal: () => void;
-  handleSaveField: (field: FieldFormValues) => void;
+  handleSaveField: (field: FormField) => void;
   formId: string;
 } 
