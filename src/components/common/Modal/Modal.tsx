@@ -6,6 +6,7 @@ import { Button } from '@/components/common';
 
 import styles from './Modal.module.scss';
 import { ModalProps } from './types';
+import { Close } from '@/assets/icons/Close';
 
 
 export const Modal: React.FC<ModalProps> = ({
@@ -58,15 +59,7 @@ export const Modal: React.FC<ModalProps> = ({
       >
         <div className={styles.header}>
           <h2 className={styles.title}>{title}</h2>
-          <Button 
-            variant="outline" 
-            size="sm" 
-            className={styles.closeButton} 
-            onClick={onClose}
-            aria-label="Close"
-          >
-            &times;
-          </Button>
+          <Close className={styles.closeButton} onClick={onClose} />
         </div>
         <div className={styles.body}>
           {children}

@@ -16,10 +16,14 @@ export const FORM_FIELD_LABELS = {
   OPTIONS: 'Options',
   DEFAULT_VALUE: 'Default Value',
   VISIBLE: 'Visible',
+  HIDDEN: 'Hidden',
+  EDITABLE: 'Editable',
   READ_ONLY: 'Read Only',
   FORM_NAME: 'Form Name',
   FORM_DESCRIPTION: 'Form Description',
   FORM_FIELDS: 'Form Fields',
+  FIELD: 'Field',
+  FIELDS: 'Fields',
 };
 
 export const FORM_FIELD_PLACEHOLDERS = {
@@ -92,3 +96,9 @@ export const FieldTypes = {
   DATE: 'date',
   EMAIL: 'email'
 }; 
+
+export const STATUS_VARIANTS = {
+  SUCCESS: 'success',
+  WARNING: 'warning',
+  DANGER: 'danger'
+};

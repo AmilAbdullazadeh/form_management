@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Warning } from '@/assets/icons/Warning';
+
 import styles from './ErrorMessage.module.scss';
 import { ErrorMessageProps } from './types';
 
@@ -8,9 +10,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
   
   return (
     <div className={styles.errorContainer} role="alert">
-      <span className={styles.errorIcon} aria-hidden="true">
-        ⚠️
-      </span>
+      <Warning />
       <span className={styles.errorText}>{message}</span>
     </div>
   );
