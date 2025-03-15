@@ -6,10 +6,12 @@ import { Checkbox } from '@/components/common/Checkbox';
 import { ErrorMessage } from '@/components/common/ErrorMessage';
 import { FieldList } from '@/components/common/FieldList';
 import { Input } from '@/components/common/Input';
+import { FORM_EMPTY_STATES } from '@/constants/form';
 import { FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form-labels';
 
 import styles from './FormModalContent.module.scss';
 import { FormModalContentProps } from './types';
+
 
 export const FormContent = ({ 
   values, 
@@ -78,10 +80,11 @@ export const FormContent = ({
           onAddField={handleOpenFieldModal}
           onDeleteField={handleDeleteField}
           onReorderFields={!isViewOnly ? reorderFormFields : undefined}
-          addButtonLabel="Add Field"
+          addButtonLabel={FORM_FIELD_LABELS.ADD_FIELD}
           emptyMessage={isViewOnly 
-            ? "This form doesn't have any fields yet." 
-            : "No fields added yet. Click \"Add Field\" to add form fields."}
+            ? FORM_EMPTY_STATES.NO_FIELDS_FOUND
+            : FORM_EMPTY_STATES.NO_FIELDS_ADDED
+          }
         />
       </div>
       

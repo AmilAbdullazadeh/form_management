@@ -2,11 +2,14 @@
 
 import React from 'react';
 
+import { Plus } from '@/assets/icons/Plus';
 import { Button } from '@/components/common/Button';
+import { FORM_FIELD_LABELS, FORM_EMPTY_STATES } from '@/constants/form';
 import { useDragAndDrop } from '@/hooks/useDragAndDrop';
 
 import styles from './FieldList.module.scss';
 import { FieldListProps } from './types';
+
 
 export const FieldList: React.FC<FieldListProps> = ({
   fields,
@@ -14,8 +17,8 @@ export const FieldList: React.FC<FieldListProps> = ({
   onAddField,
   onDeleteField,
   onReorderFields,
-  addButtonLabel = 'Add Field',
-  emptyMessage = 'No fields added yet. Click "Add Field" to add form fields.'
+  addButtonLabel = FORM_FIELD_LABELS.ADD_FIELD,
+  emptyMessage = FORM_EMPTY_STATES.NO_FIELDS_ADDED
 }) => {
   const { 
     draggedItem,
@@ -49,13 +52,14 @@ export const FieldList: React.FC<FieldListProps> = ({
   return (
     <div className={styles.fieldsSection}>
       <div className={styles.fieldsSectionHeader}>
-        <h3>Form Fields</h3>
+        <h3>{FORM_FIELD_LABELS.FORM_FIELDS}</h3>
         <Button
           variant="primary"
-          size="sm"
+          size="md"
           onClick={handleAddFieldClick}
           disabled={isViewOnly}
           type="button"
+          icon={<Plus />}
         >
           {addButtonLabel}
         </Button>
