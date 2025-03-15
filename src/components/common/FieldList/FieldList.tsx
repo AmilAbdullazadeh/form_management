@@ -18,7 +18,6 @@ export const FieldList: React.FC<FieldListProps> = ({
   emptyMessage = 'No fields added yet. Click "Add Field" to add form fields.'
 }) => {
   const { 
-    isDragging,
     draggedItem,
     handleDragStart,
     handleDragOver,
@@ -38,10 +37,10 @@ export const FieldList: React.FC<FieldListProps> = ({
     onAddField();
   };
 
-  const handleDeleteField = (e: React.MouseEvent, fieldId: string) => {
+  const handleDeleteField = (e: React.MouseEvent, fieldName: string) => {
     e.preventDefault();
     if (onDeleteField) {
-      onDeleteField(fieldId);
+      onDeleteField(fieldName);
     }
   };
 
@@ -66,8 +65,8 @@ export const FieldList: React.FC<FieldListProps> = ({
         <div className={styles.fieldsList}>
           {fields.map(field => (
             <div 
-              key={field.id} 
-              className={`${styles.fieldItem} ${draggedItem?.id === field.id ? styles.dragging : ''}`}
+              key={field.name} 
+              className={`${styles.fieldItem} ${draggedItem?.name === field.name ? styles.dragging : ''}`}
               draggable={isDragEnabled}
               onDragStart={isDragEnabled ? (e) => handleDragStart(e, field) : undefined}
               onDragOver={isDragEnabled ? handleDragOver : undefined}
@@ -80,15 +79,15 @@ export const FieldList: React.FC<FieldListProps> = ({
                     ⋮⋮
                   </span>
                 )}
-                <span className={styles.fieldLabel}>{field.label}</span>
+                <span className={styles.fieldLabel}>{field.name}</span>
                 <span className={styles.fieldType}>{field.type}</span>
-                {field.required && <span className={styles.fieldRequired}>Required</span>}
+                {field.isRequired && <span className={styles.fieldRequired}>Required</span>}
               </div>
               {!isViewOnly && onDeleteField && (
                 <Button
                   variant="danger"
                   size="sm"
-                  onClick={(e) => handleDeleteField(e, field.id)}
+                  onClick={(e) => handleDeleteField(e, field.name)}
                   type="button"
                   className={styles.deleteButton}
                 >

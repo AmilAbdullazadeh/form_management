@@ -1,24 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import fieldsReducer from './slices/fieldsSlice';
-import formsReducer from './slices/formsSlice';
+import { apiSlice } from './slices/apiSlice';
 
 export const store = configureStore({
   reducer: {
-    forms: formsReducer,
-    fields: fieldsReducer,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        // Ignore these action types
-        ignoredActions: ['your/non-serializable/action'],
-        // Ignore these field paths in all actions
-        ignoredActionPaths: ['meta.arg', 'payload.timestamp'],
-        // Ignore these paths in the state
-        ignoredPaths: ['items.dates'],
-      },
-    }),
+    getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -1,41 +1,4 @@
-import { Form } from '@/types/hook';
-
-export interface ModalState {
-  isOpen: boolean;
-  mode: FormModalMode;
-  selectedFormId: string | null;
-}
-
-export enum FieldType {
-  TEXT = 'text',
-  CHECKBOX = 'checkbox',
-  DROPDOWN = 'dropdown',
-  RADIO = 'radio',
-  TEXTAREA = 'textarea',
-  NUMBER = 'number',
-  DATE = 'date',
-  EMAIL = 'email'
-}
-
-export interface FormField {
-  id: string;
-  formId: string;
-  type: FieldType;
-  label: string;
-  placeholder?: string;
-  required: boolean;
-  options?: string[]; // For dropdown and radio fields
-  defaultValue?: string | boolean | number;
-}
-
-export interface FieldFormValues {
-  type: FieldType;
-  label: string;
-  placeholder?: string;
-  required: boolean;
-  options?: string;
-  defaultValue?: string;
-}
+import { Form } from '@/lib/redux/slices/apiSlice';
 
 export enum FormModalMode {
   CREATE = 'creating',
@@ -50,23 +13,8 @@ export interface FormModalProps {
   initialForm?: Partial<Form>;
 }
 
-export interface FormValues {
-  title: string;
-  isVisible: boolean;
-  isReadOnly: boolean;
-}
-
 export interface FormModalState {
   isOpen: boolean;
   mode: FormModalMode;
   selectedFormId: string | null;
-}
-
-export interface FieldModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  formId?: string;
-  onSave: (field: FieldFormValues) => void;
-}
-
-export type { Form }; 
+} 

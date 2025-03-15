@@ -1,26 +1,31 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { FormModalMode, FormValues } from '@/components/modals/FormModalContent/types';
 import { FORM_SUBMIT_ERRORS, FormOperations } from '@/constants/form';
 import { useForm } from '@/hooks/form/useForm';
-import { useFieldManagement } from '@/hooks/useFieldManagement';
 import { useFormMode } from '@/hooks/useFormMode';
 import { useModalState } from '@/hooks/useModalState';
-import { useAppSelector } from '@/lib/redux/hooks';
-import { selectFieldsByFormId } from '@/lib/redux/slices/fieldsSlice';
-import { addForm, selectAllForms, updateForm } from '@/lib/redux/slices/formsSlice';
-import { AppDispatch, RootState } from '@/lib/redux/store';
-import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
-import { extractFormValues, prepareFormData } from '@/utils/form';
-import { FormIdManager } from '@/utils/formIdManager';
-import { validateForm } from '@/utils/validation';
+import { Form, FormField, useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
 
 import { FormModalRenderer } from '../FormModalContent/FormModalRenderer';
 
+export interface FormModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  mode: FormModalMode;
+  initialForm?: Partial<Form>;
+}
+
+export interface FormModalState {
+  isOpen: boolean;
+  mode: FormModalMode;
+  selectedFormId: string | null;
+}
+
 const DEFAULT_FORM_VALUES: FormValues = {
-  title: '',
+  name: '',
   isVisible: true,
   isReadOnly: false
 };
@@ -29,46 +34,68 @@ export const FormModal: React.FC<FormModalProps> = ({
   isOpen,
   onClose,
   mode = FormModalMode.CREATE,
-  initialForm = {}
+  initialForm
 }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const tempFormIdRef = useRef<string>(FormIdManager.generateId());
-  const prevMode = useRef<FormModalMode>(mode);
-  const prevFormId = useRef<string | undefined>(initialForm?.id);
+  const [createForm] = useCreateFormMutation();
+  const [updateForm] = useUpdateFormMutation();
+  const [fields, setFields] = useState<FormField[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const allForms = useAppSelector(selectAllForms);
   
   // Determine initial values based on mode
-  const initialValues = useMemo(() => 
-    (mode === FormModalMode.CREATE || !initialForm?.id) 
-      ? { ...DEFAULT_FORM_VALUES } 
-      : extractFormValues(initialForm),
-  [mode, initialForm?.id]);
+  const initialValues = useMemo(() => {
+    if (mode === FormModalMode.CREATE || !initialForm?._id) {
+      return { ...DEFAULT_FORM_VALUES };
+    }
+    
+    return {
+      name: initialForm.name || '',
+      isVisible: initialForm.isVisible ?? true,
+      isReadOnly: initialForm.isReadOnly ?? false
+    };
+  }, [mode, initialForm]);
   
   const { isUpdateMode, isViewOnly } = useFormMode({ mode, initialValues });
   
-  const formId = isUpdateMode && initialForm?.id ? initialForm.id : tempFormIdRef.current;
-  const formFields = useSelector((state: RootState) => selectFieldsByFormId(state, formId));
   const fieldModal = useModalState(false);
-  const { addFieldToForm, deleteFieldFromForm, reorderFormFields } = useFieldManagement({ formId });
-
+  
+  const addFieldToForm = useCallback((field: FormField) => {
+    setFields(prev => [...prev, field]);
+  }, []);
+  
+  const deleteFieldFromForm = useCallback((fieldName: string) => {
+    setFields(prev => prev.filter(field => field.name !== fieldName));
+  }, []);
+  
+  const reorderFormFields = useCallback((reorderedFields: FormField[]) => {
+    setFields(reorderedFields);
+  }, []);
+  
   const validateFormValues = useCallback(
-    (values: FormValues) => validateForm(values, allForms, isUpdateMode ? initialForm?.id : undefined),
-    [allForms, isUpdateMode, initialForm?.id]
+    (values: FormValues) => {
+      const errors: Partial<Record<keyof FormValues, string>> = {};
+      
+      if (!values.name.trim()) {
+        errors.name = 'Form name is required';
+      }
+      
+      return errors;
+    },
+    []
   );
   
   const handleFormSubmit = useCallback(async (values: FormValues) => {
     setSubmitError(null);
     
     try {
-      const formData = prepareFormData(values);
+      const formData = {
+        ...values,
+        fields
+      };
       
-      if (isUpdateMode && initialForm?.id) {
-        await dispatch(updateForm({ id: initialForm.id, ...formData }));
+      if (isUpdateMode && initialForm?._id) {
+        await updateForm({ ...formData, _id: initialForm._id } as Form).unwrap();
       } else {
-        await dispatch(addForm(formData));
-        const newFormId = FormIdManager.generateId();
-        FormIdManager.saveFieldsForNewForm(dispatch, tempFormIdRef.current, formFields, newFormId);
+        await createForm(formData as Omit<Form, '_id'>).unwrap();
       }
       
       onClose();
@@ -77,7 +104,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
       throw error;
     }
-  }, [isUpdateMode, initialForm?.id, dispatch, onClose, formFields]);
+  }, [isUpdateMode, initialForm, createForm, updateForm, onClose, fields]);
   
   const {
     values,
@@ -97,39 +124,29 @@ export const FormModal: React.FC<FormModalProps> = ({
   const handleModalClose = useCallback(() => {
     setSubmitError(null);
     resetForm();
-    
-    if (!isUpdateMode) {
-      FormIdManager.cleanupTemporaryFields(dispatch, tempFormIdRef.current);
-      tempFormIdRef.current = FormIdManager.generateId();
-    }
-    
+    setFields([]);
     onClose();
-  }, [onClose, resetForm, isUpdateMode, dispatch]);
+  }, [onClose, resetForm]);
   
   // Reset form when modal opens/closes or mode changes
   useEffect(() => {
     if (!isOpen) {
       setSubmitError(null);
       resetForm();
+      setFields([]);
       return;
     }
 
-    const modeChanged = prevMode.current !== mode;
-    const formIdChanged = prevFormId.current !== initialForm?.id;
-    
-    if (modeChanged || formIdChanged) {
-      prevMode.current = mode;
-      prevFormId.current = initialForm?.id;
-      setSubmitError(null);
-      
-      if (mode === FormModalMode.CREATE) {
-        setValues({ ...DEFAULT_FORM_VALUES });
-        tempFormIdRef.current = FormIdManager.generateId();
-      } else {
-        setValues(extractFormValues(initialForm));
-      }
+    if (initialForm?.fields) {
+      setFields(initialForm.fields);
     }
-  }, [isOpen, mode, initialForm?.id, setValues, resetForm]);
+    
+    setValues({
+      name: initialForm?.name || '',
+      isVisible: initialForm?.isVisible ?? true,
+      isReadOnly: initialForm?.isReadOnly ?? false
+    });
+  }, [isOpen, initialForm, setValues, resetForm]);
   
   return (
     <FormModalRenderer 
@@ -140,7 +157,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       isSubmitting={isSubmitting}
       values={values}
       errors={errors}
-      formFields={formFields}
+      formFields={fields}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
       handleOpenFieldModal={fieldModal.open}
@@ -150,7 +167,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       isFieldModalOpen={fieldModal.isOpen}
       handleCloseFieldModal={fieldModal.close}
       handleSaveField={addFieldToForm}
-      formId={formId}
+      formId={initialForm?._id || ''}
     />
   );
 }; 

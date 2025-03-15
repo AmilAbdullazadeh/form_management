@@ -1,45 +1,29 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { FormCardList, SkeletonFormList } from '@/components/common';
 import formStyles from '@/components/common/Card/Form/List/FormCardList.module.scss';
 import { useFormModal } from '@/components/common/Modal/FormModal/FormModal';
 import { FormModal } from '@/components/modals/FormModal/FormModal';
-import { FORM_EMPTY_STATES, FormStates } from '@/constants/form';
+import { FORM_EMPTY_STATES } from '@/constants/form';
 import { FORM_BUTTON_TEXT } from '@/constants/form-labels';
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { deleteForm, selectAllForms, selectFormById, selectFormsStatus } from '@/lib/redux/slices/formsSlice';
+import { useDeleteFormMutation, useGetFormsQuery } from '@/lib/redux/slices/apiSlice';
 import { FormModalMode, FormModalState } from '@/types/form';
-import { parseDescriptionProperty } from '@/utils/form';
 
 export const FormList: React.FC = () => {
-  const dispatch = useAppDispatch();
   const { openDeleteModal } = useFormModal();
   
-  const forms = useAppSelector(selectAllForms);
-  const formsStatus = useAppSelector(selectFormsStatus);
+  const { data: forms = [], isLoading, error } = useGetFormsQuery();
+  const [deleteForm] = useDeleteFormMutation();
   
-  const [isLoading, setIsLoading] = useState(true);
   const [modalState, setModalState] = useState<FormModalState>({
     isOpen: false,
     mode: FormModalMode.CREATE,
     selectedFormId: null
   });
   
-  const selectedForm = useAppSelector(
-    state => modalState.selectedFormId 
-      ? selectFormById(state, modalState.selectedFormId) 
-      : undefined
-  );
-  
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-    
-    return () => clearTimeout(timer);
-  }, []);
+  const selectedForm = forms.find(form => form._id === modalState.selectedFormId);
   
   const handleOpenCreateModal = useCallback(() => {
     setModalState({
@@ -50,32 +34,30 @@ export const FormList: React.FC = () => {
   }, []);
   
   const handleEdit = useCallback((id: string) => {
-    const form = forms.find(f => f.id === id);
+    const form = forms.find(f => f._id === id);
     
     if (form) {
-      const isReadOnly = parseDescriptionProperty(form.description || '', 'isReadOnly');
-      
       setModalState({
         isOpen: true,
-        mode: isReadOnly ? FormModalMode.VIEW : FormModalMode.UPDATE,
+        mode: form.isReadOnly ? FormModalMode.VIEW : FormModalMode.UPDATE,
         selectedFormId: id
       });
     }
   }, [forms]);
   
   const handleDelete = useCallback((id: string) => {
-    const formToDelete = forms.find(form => form.id === id);
+    const formToDelete = forms.find(form => form._id === id);
     
     if (formToDelete) {
       openDeleteModal({
         title: 'Delete Form',
-        itemName: formToDelete.title,
+        itemName: formToDelete.name,
         onDelete: async () => {
-          dispatch(deleteForm(id));
+          await deleteForm(id).unwrap();
         }
       });
     }
-  }, [dispatch, forms, openDeleteModal]);
+  }, [forms, openDeleteModal, deleteForm]);
   
   const handleCloseModal = useCallback(() => {
     setModalState(prev => ({
@@ -84,16 +66,18 @@ export const FormList: React.FC = () => {
     }));
   }, []);
   
-  const showSkeleton = isLoading || formsStatus === FormStates.LOADING;
-  
   const renderContent = () => {
-    if (showSkeleton) {
+    if (isLoading) {
       return (
         <SkeletonFormList 
           count={forms.length || 3} 
           gridClassName={formStyles.formCardList} 
         />
       );
+    }
+    
+    if (error) {
+      return <div>Error loading forms. Please try again.</div>;
     }
     
     return (

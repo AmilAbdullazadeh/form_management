@@ -23,7 +23,7 @@ export const FormCardList: React.FC<FormCardListProps> = ({
   return (
     <div className={`${styles.formCardList} ${className}`}>
       {forms.map(form => (
-        <FormItemCard key={form.id} form={form} onEdit={onEdit} onDelete={onDelete} />
+        <FormItemCard key={form._id} form={form} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </div>
   );

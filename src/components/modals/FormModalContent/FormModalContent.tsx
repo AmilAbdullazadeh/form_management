@@ -28,13 +28,13 @@ export const FormContent = ({
     <>
       <div className={styles.formGroup}>
         <Input
-          id="title"
-          name="title"
+          id="name"
+          name="name"
           label={FORM_FIELD_LABELS.FORM_NAME}
-          value={values.title}
+          value={values.name}
           onChange={handleChange}
           placeholder={FORM_FIELD_PLACEHOLDERS.FORM_NAME}
-          error={errors.title}
+          error={errors.name}
           fullWidth
           required
           autoFocus
