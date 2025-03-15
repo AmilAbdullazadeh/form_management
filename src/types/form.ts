@@ -1,4 +1,4 @@
-import { Form } from '@/lib/redux/slices/apiSlice';
+import { Form } from '@/types/api';
 
 export enum FormModalMode {
   CREATE = 'creating',
@@ -18,3 +18,9 @@ export interface FormModalState {
   mode: FormModalMode;
   selectedFormId: string | null;
 } 
+
+export interface FormValues {
+  name: string;
+  isVisible: boolean;
+  isReadOnly: boolean;
+}

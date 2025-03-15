@@ -13,3 +13,18 @@ export interface FormField {
     createdAt?: string;
     updatedAt?: string;
   }
+
+  export interface addForm {
+    title: string;
+    isVisible: boolean;
+    isReadOnly: boolean;
+    fields: FormField[];
+  }
+
+  export interface selectAllForms {
+    forms: Form[];
+  }
+
+  export interface updateForm {
+    form: Form;
+  }

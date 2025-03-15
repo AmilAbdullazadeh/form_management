@@ -2,44 +2,28 @@
 
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 
-import { FORM_FIELD_VALIDATION_ERRORS } from '@/constants/form-labels';
-
-export enum FieldType {
-  TEXT = 'text',
-  CHECKBOX = 'checkbox',
-  DROPDOWN = 'dropdown',
-  RADIO = 'radio',
-  TEXTAREA = 'textarea',
-  NUMBER = 'number',
-  DATE = 'date',
-  EMAIL = 'email'
-}
+import { FormField } from '@/types/api';
+import { validateFieldName } from '@/utils/validation';
 
 export interface FieldFormValues {
+  name: string;
   type: string;
-  label: string;
-  placeholder?: string;
-  required: boolean;
-  options?: string;
-  defaultValue?: string;
+  isRequired: boolean;
 }
 
 export const DEFAULT_FIELD_VALUES: FieldFormValues = {
-  type: FieldType.TEXT,
-  label: '',
-  placeholder: '',
-  required: false,
-  options: '',
-  defaultValue: ''
+  name: '',
+  type: 'text',
+  isRequired: false
 };
 
 interface UseFieldFormProps {
-  onSave: (field: FieldFormValues) => Promise<void> | void;
+  onSave: (field: FormField) => void;
   onClose: () => void;
-  formId?: string;
+  existingFields?: FormField[];
 }
 
-export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
+export const useFieldForm = ({ onSave, onClose, existingFields = [] }: UseFieldFormProps) => {
   const [values, setValues] = useState<FieldFormValues>(DEFAULT_FIELD_VALUES);
   const [errors, setErrors] = useState<Partial<Record<keyof FieldFormValues, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,7 +38,6 @@ export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
       setValues(prev => ({ ...prev, [name]: value }));
     }
     
-    // Clear error when field is changed
     if (errors[name as keyof FieldFormValues]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -63,32 +46,35 @@ export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
   const validateForm = useCallback(() => {
     const newErrors: Partial<Record<keyof FieldFormValues, string>> = {};
     
-    if (!values.label.trim()) {
-      newErrors.label = FORM_FIELD_VALIDATION_ERRORS.LABEL_REQUIRED;
-    }
-    
-    if ((values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO) && !values.options?.trim()) {
-      newErrors.options = FORM_FIELD_VALIDATION_ERRORS.OPTIONS_REQUIRED;
+    const nameValidation = validateFieldName(values.name, existingFields);
+    if (!nameValidation.isValid && nameValidation.error) {
+      newErrors.name = nameValidation.error;
     }
     
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [values]);
+    return { isValid: Object.keys(newErrors).length === 0, errors: newErrors };
+  }, [values, existingFields]);
 
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    const { isValid, errors } = validateForm();
+    setErrors(errors);
+    
+    if (!isValid) {
       return;
     }
     
     setIsSubmitting(true);
     
     try {
-      const processedValues = { ...values };
+      const field: FormField = {
+        name: values.name,
+        type: values.type as FormField['type'],
+        isRequired: values.isRequired
+      };
       
-      await onSave(processedValues);
-      
+      onSave(field);
       onClose();
     } catch (error) {
       console.error('Error saving field:', error);
@@ -102,13 +88,10 @@ export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
     setErrors({});
   }, []);
 
-  const showOptionsField = values.type === FieldType.DROPDOWN || values.type === FieldType.RADIO;
-
   return {
     values,
     errors,
     isSubmitting,
-    showOptionsField,
     handleChange,
     handleSubmit,
     resetForm

@@ -2,7 +2,11 @@
 
 import { ChangeEvent, FormEvent, useCallback, useEffect, useRef, useState } from 'react';
 
-import { UseFormProps } from '@/types/hook';
+interface UseFormProps<T> {
+  initialValues: T;
+  onSubmit: (values: T) => Promise<void> | void;
+  validate?: (values: T) => Partial<Record<keyof T, string>>;
+}
 
 /**
  * @param initialValues - Initial values for the form
@@ -16,9 +20,7 @@ export const useForm = <T extends Record<string, any>>({
 }: UseFormProps<T>) => {
   const [values, setValues] = useState<T>(initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
-  const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   
   // Keep track of initialValues with a ref
   const initialValuesRef = useRef(initialValues);
@@ -30,9 +32,7 @@ export const useForm = <T extends Record<string, any>>({
   const resetForm = useCallback(() => {
     setValues(initialValuesRef.current);
     setErrors({});
-    setTouched({});
     setIsSubmitting(false);
-    setIsSubmitted(false);
   }, []);
   
   const handleChange = useCallback((
@@ -49,20 +49,14 @@ export const useForm = <T extends Record<string, any>>({
       [name]: newValue
     }));
     
-    // Mark field as touched
-    setTouched(prev => ({
-      ...prev,
-      [name]: true
-    }));
-    
-    if (validate && isSubmitted) {
+    if (validate) {
       const validationErrors = validate({
         ...values,
         [name]: newValue
       });
       setErrors(validationErrors);
     }
-  }, [values, validate, isSubmitted]);
+  }, [values, validate]);
   
   const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
@@ -76,26 +70,12 @@ export const useForm = <T extends Record<string, any>>({
       setErrors(validationErrors);
     }
     
-    // Mark all fields as touched
-    const allTouched = Object.keys(values).reduce((acc, key) => {
-      acc[key as keyof T] = true;
-      return acc;
-    }, {} as Partial<Record<keyof T, boolean>>);
-    
-    setTouched(allTouched);
-    setIsSubmitted(true);
-    
     if (formIsValid) {
       try {
         setIsSubmitting(true);
         await onSubmit(values);
       } catch (error) {
         console.error('Error submitting form:', error);
-        setErrors({
-          ...errors,
-          submit: 'An error occurred while submitting the form'
-        });
-        throw error;
       } finally {
         setIsSubmitting(false);
       }
@@ -105,9 +85,7 @@ export const useForm = <T extends Record<string, any>>({
   return {
     values,
     errors,
-    touched,
     isSubmitting,
-    isSubmitted,
     handleChange,
     handleSubmit,
     setValues,

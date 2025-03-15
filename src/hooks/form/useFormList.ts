@@ -1,30 +1,23 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
-import { deleteForm, selectAllForms, selectFormById, selectFormsStatus } from '@/lib/redux/slices/formsSlice';
-import { FormModalMode, ModalState } from '@/types/form';
+import { useDeleteFormMutation, useGetFormsQuery } from '@/lib/redux/slices/apiSlice';
+import { FormModalMode, FormModalState } from '@/types/form';
 
 /**
  * @returns Form list state and handlers
  */
 export const useFormList = () => {
-  const dispatch = useAppDispatch();
-  
-  const forms = useAppSelector(selectAllForms);
-  const formsStatus = useAppSelector(selectFormsStatus);
+  const { data: forms = [], isLoading: isApiLoading } = useGetFormsQuery();
+  const [deleteForm] = useDeleteFormMutation();
   
   const [isLoading, setIsLoading] = useState(true);
-  const [modalState, setModalState] = useState<ModalState>({
+  const [modalState, setModalState] = useState<FormModalState>({
     isOpen: false,
     mode: FormModalMode.CREATE,
     selectedFormId: null
   });
   
-  const selectedForm = useAppSelector(
-    state => modalState.selectedFormId 
-      ? selectFormById(state, modalState.selectedFormId) 
-      : undefined
-  );
+  const selectedForm = forms.find(form => form._id === modalState.selectedFormId);
   
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -52,9 +45,9 @@ export const useFormList = () => {
   
   const handleDelete = useCallback((id: string) => {
     if (window.confirm('Are you sure you want to delete this form?')) {
-      dispatch(deleteForm(id));
+      deleteForm(id);
     }
-  }, [dispatch]);
+  }, [deleteForm]);
   
   const handleCloseModal = useCallback(() => {
     setModalState(prev => ({
@@ -63,8 +56,8 @@ export const useFormList = () => {
     }));
   }, []);
   
-  // Determine if we should show skeleton based on loading state or API status
-  const showSkeleton = isLoading || formsStatus === 'loading';
+  // loading state or API status
+  const showSkeleton = isLoading || isApiLoading;
   
   return {
     forms,

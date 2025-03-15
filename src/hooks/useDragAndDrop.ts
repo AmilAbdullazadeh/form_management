@@ -2,7 +2,7 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 
-import { FormField } from '@/lib/redux/slices/apiSlice';
+import { FormField } from '@/types/api';
 
 interface UseDragAndDropProps {
   items: FormField[];
