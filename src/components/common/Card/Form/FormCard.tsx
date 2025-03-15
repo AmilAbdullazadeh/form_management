@@ -17,7 +17,7 @@ export const FormCard: React.FC<FormCardProps> = ({
     <div className={`${styles.formCard} ${className}`}>
       <div className={styles.header}>
         <div>
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={styles.title}>{title.length > 20 ? title.slice(0, 20) + '...' : title}</h3>
           {subtitle && <p className={styles.subtitle}>{subtitle}</p>}
 
           {metadata.length > 0 && (
@@ -32,18 +32,18 @@ export const FormCard: React.FC<FormCardProps> = ({
           )}
         </div>
 
-        <div>
+        <div className={styles.badgeContainer}>
           {badge?.map((item, index) => (
             <span key={index} className={`${styles.badge} ${styles[item.variant]}`}>
               {item.text}
             </span>
           ))}
-
-          {actions && <div className={styles.actions}>{actions}</div>}
         </div>
       </div>
 
       {children && <div className={styles.body}>{children}</div>}
+
+      {actions && <div className={styles.body + ' ' + styles.actions}>{actions}</div>}
 
       {footer && <div className={styles.footer}>{footer}</div>}
     </div>

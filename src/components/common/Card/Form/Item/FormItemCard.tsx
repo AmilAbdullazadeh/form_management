@@ -8,6 +8,9 @@ import { BadgeVariant } from '@/components/common/Card/Form/types';
 
 import styles from './FormItemCard.module.scss';
 import { FormItemCardProps } from './types';
+import { Eye } from '@/assets/icons/Eye';
+import { Update } from '@/assets/icons/Update';
+import { Trash } from '@/assets/icons/Trash';
 
 export const FormItemCard: React.FC<FormItemCardProps> = ({
   form,
@@ -62,24 +65,24 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
         <>
           {onEdit && (
             <Button
-              variant="secondary"
+              className={styles.button}
+              variant="outline"
               size="sm"
               onClick={handleEdit}
               disabled={!isVisible}
-            >
-              {isReadOnly ? 'Show Details' : 'Edit'}
-            </Button>
+              icon={isReadOnly ? <Eye /> : <Update />}
+            />
           )}
           
           {onDelete && (
             <Button
-              variant="danger"
+              className={styles.button}
+              variant="outline"
               size="sm"
               onClick={handleDelete}
               disabled={!isVisible || isReadOnly}
-            >
-              Delete
-            </Button>
+              icon={<Trash />}
+            />
           )}
         </>
       }

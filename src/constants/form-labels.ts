@@ -19,7 +19,7 @@ export const FORM_FIELD_PLACEHOLDERS = {
 };
 
 export const FORM_BUTTON_TEXT = {
-  CREATE_FORM: 'Create Form'
+  CREATE_FORM: 'Create form'
 };
 
 export const FORM_CONFIRMATION_MESSAGES = {

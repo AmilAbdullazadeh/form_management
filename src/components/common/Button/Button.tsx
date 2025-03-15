@@ -3,15 +3,6 @@ import React from 'react';
 import styles from './Button.module.scss';
 import { ButtonProps } from './types';
 
-/**
- * @param variant - Button style variant
- * @param size - Button size
- * @param isLoading - Whether the button is in loading state
- * @param fullWidth - Whether the button should take full width
- * @param className - Additional CSS class
- * @param children - Button content
- * @param props - Additional button props
- */
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
@@ -19,9 +10,10 @@ export const Button: React.FC<ButtonProps> = ({
   fullWidth = false,
   className = '',
   children,
+  icon,
   ...props
 }) => {
-  // Generate button classes based on props, if props.disabled is true, the button will be disabled
+  // classes for the button based on props
   const getButtonClasses = () => {
     const classes = [styles.button];
 
@@ -51,7 +43,8 @@ export const Button: React.FC<ButtonProps> = ({
   return (
     <button className={getButtonClasses()} disabled={isLoading || props.disabled} {...props}>
       {isLoading ? <span className={styles.spinner}></span> : null}
-      <span className={isLoading ? styles.spinnerText : ''}>{children}</span>
+      {icon && icon}
+      {children && <span className={isLoading ? styles.spinnerText : ''}>{children}</span>}
     </button>
   );
 };

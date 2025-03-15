@@ -1,5 +1,9 @@
 @import '../../../../../styles/index';
 
+.button {
+  padding: $spacing-sm !important;
+}
+
 .disabled {
   opacity: 0.5;
   pointer-events: none;
