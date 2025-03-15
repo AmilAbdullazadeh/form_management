@@ -24,6 +24,7 @@ export const FORM_FIELD_LABELS = {
   FORM_FIELDS: 'Form Fields',
   FIELD: 'Field',
   FIELDS: 'Fields',
+  ADD_FIELD: 'Add Field',
 };
 
 export const FORM_FIELD_PLACEHOLDERS = {
@@ -63,7 +64,9 @@ export const FORM_SUBMIT_ERRORS = {
 };
 
 export const FORM_EMPTY_STATES = {
-  NO_FORMS_FOUND: 'No forms found. Click \'Create Form\' to add one.'
+  NO_FORMS_FOUND: 'No forms found. Click "Create Form" to add one.',
+  NO_FIELDS_FOUND: 'This form doesn\'t have any fields yet.',
+  NO_FIELDS_ADDED: 'No fields added yet. Click "Add Field" to add form fields.'
 }; 
 
 export const FormProperties = {

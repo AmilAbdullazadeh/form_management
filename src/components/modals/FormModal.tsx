@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Button, Checkbox, ErrorMessage, Input, Modal } from '@/components/common';
-import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form';
+import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS, FormOperations } from '@/constants/form';
 import { useForm } from '@/hooks';
 import { useCreateFormMutation, useUpdateFormMutation, useGetFormsQuery } from '@/lib/redux/slices/apiSlice';
 import { Form } from '@/types/api';
@@ -82,7 +82,7 @@ export const FormModal: React.FC<FormModalProps> = ({
       
       onClose();
     } catch (error) {
-      console.error(`Error ${isUpdateMode ? 'updating' : 'creating'} form:`, error);
+      console.error(`Error ${isUpdateMode ? FormOperations.UPDATING : FormOperations.CREATING} form:`, error);
       setSubmitError(isUpdateMode ? FORM_SUBMIT_ERRORS.UPDATE_FAILED : FORM_SUBMIT_ERRORS.CREATE_FAILED);
     }
   }, [isUpdateMode, initialForm, createForm, updateForm, onClose]);

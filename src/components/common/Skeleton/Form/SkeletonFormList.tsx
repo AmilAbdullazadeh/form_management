@@ -4,7 +4,7 @@ import { SkeletonCard } from '../Card/SkeletonCard';
 import { SkeletonFormListProps } from '../types';
 
 export const SkeletonFormList: React.FC<SkeletonFormListProps> = ({
-  count = 3,
+  count = 9,
   className = '',
   gridClassName = '',
 }) => {

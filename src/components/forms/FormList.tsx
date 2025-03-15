@@ -71,7 +71,7 @@ export const FormList: React.FC = () => {
     if (isLoading) {
       return (
         <SkeletonFormList 
-          count={forms.length || 3} 
+          count={forms.length || 9} 
           gridClassName={formStyles.formCardList} 
         />
       );

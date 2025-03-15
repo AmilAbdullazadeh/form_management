@@ -2,7 +2,8 @@ export const FORM_FIELD_LABELS = {
   FORM_NAME: 'Form Name',
   VISIBLE: 'Visible',
   READ_ONLY: 'Read Only',
-  LABEL: 'Field Label'
+  LABEL: 'Field Label',
+  ADD_FIELD: 'Add Field'
 };
 
 export const FORM_FIELD_VALIDATION_ERRORS = {
