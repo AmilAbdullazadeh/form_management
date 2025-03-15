@@ -1,11 +1,19 @@
-import React from 'react';
+import { Metadata } from 'next';
 
 import { Skeleton } from '@/components/common/Skeleton/Skeleton';
 
+// meta data
+export const metadata: Metadata = {
+  title: 'Form Management',
+  description: 'A simple form management application',
+};
+
 export default function HomePage() {
+
+  
   return (
     <main className="container">
-      <div style={{ textAlign: 'center', marginTop: '4rem' }}>
+      <div className='mt-4 text-center'>
         <Skeleton type="title" className='mx-auto w-1/2' />
         <Skeleton type="text" size="md" className='mt-4 mx-auto' />
         
