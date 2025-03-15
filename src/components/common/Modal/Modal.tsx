@@ -7,16 +7,7 @@ import { Button } from '@/components/common';
 import styles from './Modal.module.scss';
 import { ModalProps } from './types';
 
-/**
- * 
- * @param isOpen - Whether the modal is open
- * @param onClose - Function to close the modal
- * @param title - Modal title
- * @param children - Modal content
- * @param footer - Modal footer
- * @param size - Modal size
- * @param closeOnOutsideClick - Whether to close the modal when clicking outside
- */
+
 export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,

@@ -2,16 +2,13 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Button } from '@/components/common/Button';
-import { Checkbox } from '@/components/common/Checkbox';
-import { ErrorMessage } from '@/components/common/ErrorMessage';
-import { Input } from '@/components/common/Input';
-import { Modal } from '@/components/common/Modal';
+import { Button, Checkbox, ErrorMessage, Input, Modal } from '@/components/common';
 import { FORM_MODAL_TEXT, FORM_SUBMIT_ERRORS, FORM_FIELD_LABELS, FORM_FIELD_PLACEHOLDERS } from '@/constants/form';
-import { useForm } from '@/hooks/form/useForm';
-import { useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
+import { useForm } from '@/hooks';
+import { useCreateFormMutation, useUpdateFormMutation, useGetFormsQuery } from '@/lib/redux/slices/apiSlice';
 import { Form } from '@/types/api';
 import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
+import { validateFormName } from '@/utils/validation';
 
 import styles from './FormModal.module.scss';
 
@@ -27,6 +24,7 @@ export const FormModal: React.FC<FormModalProps> = ({
   mode = FormModalMode.CREATE,
   initialForm = {}
 }) => {
+  const { data: forms = [] } = useGetFormsQuery();
   const [createForm] = useCreateFormMutation();
   const [updateForm] = useUpdateFormMutation();
   const isUpdateMode = mode === FormModalMode.UPDATE;
@@ -51,12 +49,19 @@ export const FormModal: React.FC<FormModalProps> = ({
   const validateFormValues = useCallback((values: FormValues) => {
     const errors: Partial<Record<keyof FormValues, string>> = {};
     
-    if (!values.name.trim()) {
-      errors.name = 'Form name is required';
+    // Validate form name
+    const nameValidation = validateFormName(
+      values.name, 
+      forms, 
+      isUpdateMode ? initialForm?._id : undefined
+    );
+    
+    if (!nameValidation.isValid && nameValidation.error) {
+      errors.name = nameValidation.error;
     }
     
     return errors;
-  }, []);
+  }, [forms, isUpdateMode, initialForm?._id]);
   
   const handleFormSubmit = useCallback(async (values: FormValues) => {
     setSubmitError(null);
@@ -164,52 +169,52 @@ export const FormModal: React.FC<FormModalProps> = ({
       onClose={handleModalClose}
       title={isViewOnly ? 'Form Details' : modalTitle}
       footer={modalFooter}
-    >
-      <div className={`${styles.formContainer} ${isViewOnly ? styles.readOnlyForm : ''}`}>
-        <form id="form-modal" onSubmit={handleSubmit} noValidate>
-          <div className={styles.formGroup}>
-            <Input
-              id="name"
-              name="name"
-              label={FORM_FIELD_LABELS.FORM_NAME}
-              value={values.name}
-              onChange={handleChange}
-              placeholder={FORM_FIELD_PLACEHOLDERS.FORM_NAME}
-              error={errors.name}
-              fullWidth
-              required
-              autoFocus
-              disabled={isViewOnly}
-            />
-          </div>
-          
-          <div className={styles.checkboxGroup}>
-            <Checkbox
-              id="isVisible"
-              name="isVisible"
-              label={FORM_FIELD_LABELS.VISIBLE}
-              checked={values.isVisible}
-              onChange={handleChange}
-              disabled={isViewOnly}
-            />
-            
-            <Checkbox
-              id="isReadOnly"
-              name="isReadOnly"
-              label={FORM_FIELD_LABELS.READ_ONLY}
-              checked={values.isReadOnly}
-              onChange={handleChange}
-              disabled={isViewOnly}
-            />
-          </div>
-          
-          {submitError && (
-            <div className={styles.submitError}>
-              <ErrorMessage message={submitError} />
+      >
+        <div className={`${styles.formContainer} ${isViewOnly ? styles.readOnlyForm : ''}`}>
+          <form id="form-modal" onSubmit={handleSubmit} noValidate>
+            <div className={styles.formGroup}>
+              <Input
+                id="name"
+                name="name"
+                label={FORM_FIELD_LABELS.FORM_NAME}
+                value={values.name}
+                onChange={handleChange}
+                placeholder={FORM_FIELD_PLACEHOLDERS.FORM_NAME}
+                error={errors.name}
+                fullWidth
+                required
+                autoFocus
+                disabled={isViewOnly}
+              />
             </div>
-          )}
-        </form>
-      </div>
-    </Modal>
+            
+            <div className={styles.checkboxGroup}>
+              <Checkbox
+                id="isVisible"
+                name="isVisible"
+                label={FORM_FIELD_LABELS.VISIBLE}
+                checked={values.isVisible}
+                onChange={handleChange}
+                disabled={isViewOnly}
+              />
+              
+              <Checkbox
+                id="isReadOnly"
+                name="isReadOnly"
+                label={FORM_FIELD_LABELS.READ_ONLY}
+                checked={values.isReadOnly}
+                onChange={handleChange}
+                disabled={isViewOnly}
+              />
+            </div>
+            
+            {submitError && (
+              <div className={styles.submitError}>
+                <ErrorMessage message={submitError} />
+              </div>
+            )}
+          </form>
+        </div>
+      </Modal>
   );
 }; 
