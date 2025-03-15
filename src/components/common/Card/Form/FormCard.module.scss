@@ -35,9 +35,9 @@
   color: $gray-900;
   margin: 0;
   margin-bottom: $spacing-xs;
-  white-space: nowrap; /* Prevents the text from wrapping to the next line */
-  overflow: hidden;    /* Ensures that the overflow is hidden */
-  text-overflow: ellipsis; /* Adds the ellipsis (...) */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   max-width: 100%;    
 }
 
