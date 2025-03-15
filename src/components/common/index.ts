@@ -7,3 +7,5 @@ export { Skeleton } from './Skeleton/Skeleton';
 export { SkeletonCard } from './Skeleton/Card/SkeletonCard';
 export { SkeletonFormList } from './Skeleton/Form/SkeletonFormList';
 export { Modal, ModalProvider, useModal, useFormModal } from './Modal';
+export { Checkbox } from './Checkbox/Checkbox';
+export { ErrorMessage } from './ErrorMessage/ErrorMessage';

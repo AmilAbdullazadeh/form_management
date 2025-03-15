@@ -4,9 +4,8 @@ import { Skeleton } from '../Skeleton';
 
 import styles from './SkeletonCard.module.scss';
 import { SkeletonCardProps } from './types';
-/**
- * SkeletonCard for form card loading
- */
+
+
 export const SkeletonCard: React.FC<SkeletonCardProps> = ({ className = '', style = {} }) => {
   return (
     <div className={`card ${className}`} style={style}>

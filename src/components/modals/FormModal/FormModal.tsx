@@ -4,9 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { FormValues } from '@/components/modals/FormModalContent/types';
 import { FORM_SUBMIT_ERRORS, FormOperations } from '@/constants/form';
-import { useForm } from '@/hooks/form/useForm';
-import { useFormMode } from '@/hooks/useFormMode';
-import { useModalState } from '@/hooks/useModalState';
+import { useForm, useFormMode, useModalState } from '@/hooks';
 import { useCreateFormMutation, useGetFormsQuery, useUpdateFormMutation } from '@/lib/redux/slices/apiSlice';
 import { Form, FormField } from '@/types/api';
 import { FormModalMode } from '@/types/form';
@@ -159,25 +157,25 @@ export const FormModal: React.FC<FormModalProps> = ({
   }, [isOpen, initialForm, setValues, resetForm]);
   
   return (
-    <FormModalRenderer 
-      isOpen={isOpen}
-      onClose={handleModalClose}
-      mode={mode}
-      isViewOnly={isViewOnly}
-      isSubmitting={isSubmitting || isCreating || isUpdating}
-      values={values}
-      errors={errors}
-      formFields={fields}
-      handleChange={handleChange}
-      handleSubmit={handleSubmit}
-      handleOpenFieldModal={fieldModal.open}
-      handleDeleteField={deleteFieldFromForm}
-      reorderFormFields={reorderFormFields}
-      submitError={submitError}
-      isFieldModalOpen={fieldModal.isOpen}
-      handleCloseFieldModal={fieldModal.close}
-      handleSaveField={addFieldToForm}
-      formId={initialForm?._id || ''}
-    />
+      <FormModalRenderer 
+        isOpen={isOpen}
+        onClose={handleModalClose}
+        mode={mode}
+        isViewOnly={isViewOnly}
+        isSubmitting={isSubmitting || isCreating || isUpdating}
+        values={values}
+        errors={errors}
+        formFields={fields}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleOpenFieldModal={fieldModal.open}
+        handleDeleteField={deleteFieldFromForm}
+        reorderFormFields={reorderFormFields}
+        submitError={submitError}
+        isFieldModalOpen={fieldModal.isOpen}
+        handleCloseFieldModal={fieldModal.close}
+        handleSaveField={addFieldToForm}
+        formId={initialForm?._id || ''}
+      />
   );
 }; 
