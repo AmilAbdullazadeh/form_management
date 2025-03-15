@@ -6,10 +6,6 @@ import { useCreateFormMutation, useUpdateFormMutation } from '@/lib/redux/slices
 import { Form } from '@/types/api';
 import { FormModalMode, FormModalProps, FormValues } from '@/types/form';
 
-/**
- * @param props - The modal props
- * @returns Form state, handlers, and UI elements for the form modal
- */
 export const useFormModal = ({ 
   isOpen, 
   onClose, 
@@ -27,7 +23,7 @@ export const useFormModal = ({
     
     try {
       const formData = {
-        name: values.title,
+        name: values.name,
         isVisible: values.isVisible,
         isReadOnly: values.isReadOnly,
         fields: initialForm.fields || []
@@ -55,7 +51,7 @@ export const useFormModal = ({
     setValues
   } = useForm<FormValues>({
     initialValues: {
-      title: initialForm?.name || '',
+      name: initialForm?.name || '',
       isVisible: initialForm?.isVisible ?? true,
       isReadOnly: initialForm?.isReadOnly ?? false
     },
@@ -63,8 +59,8 @@ export const useFormModal = ({
     validate: (values: FormValues) => {
       const errors: Partial<Record<keyof FormValues, string>> = {};
       
-      if (!values.title.trim()) {
-        errors.title = 'Form name is required';
+      if (!values.name.trim()) {
+        errors.name = 'Form name is required';
       }
       
       return errors;
@@ -76,7 +72,7 @@ export const useFormModal = ({
       // When modal opens or initialForm changes, update form values
       if (initialForm?._id && !formInitialized.current) {
         setValues({
-          title: initialForm?.name || '',
+          name: initialForm?.name || '',
           isVisible: initialForm?.isVisible ?? true,
           isReadOnly: initialForm?.isReadOnly ?? false
         });

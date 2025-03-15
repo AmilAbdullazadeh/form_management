@@ -17,6 +17,11 @@
   }
 }
 
+.button {
+  cursor: pointer;
+  border-radius: 50%;
+}
+
 .fieldIcon, .submissionIcon {
   font-size: $font-size-base;
   margin-right: $spacing-xs;
