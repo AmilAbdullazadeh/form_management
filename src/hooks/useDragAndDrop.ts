@@ -2,11 +2,11 @@
 
 import React, { useCallback, useRef, useState } from 'react';
 
-import { FormField } from '@/types/form';
+import { FormField } from '@/lib/redux/slices/apiSlice';
 
 interface UseDragAndDropProps {
   items: FormField[];
-  onReorder: (reorderedItems: FormField[]) => void;
+  onReorder: (newItems: FormField[]) => void;
 }
 
 export const useDragAndDrop = ({ items, onReorder }: UseDragAndDropProps) => {
@@ -28,9 +28,8 @@ export const useDragAndDrop = ({ items, onReorder }: UseDragAndDropProps) => {
     setDraggedItem(item);
     setIsDragging(true);
     
-    // Required for Firefox
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', item.id);
+    e.dataTransfer.setData('text/plain', item.name);
   }, []);
   
   const handleDragOver = useCallback((e: React.DragEvent<HTMLElement>) => {
@@ -42,13 +41,13 @@ export const useDragAndDrop = ({ items, onReorder }: UseDragAndDropProps) => {
   const handleDrop = useCallback((e: React.DragEvent<HTMLElement>, targetItem: FormField) => {
     e.preventDefault();
     
-    if (!draggedItem || draggedItem.id === targetItem.id) {
+    if (!draggedItem || draggedItem.name === targetItem.name) {
       return;
     }
     
     const currentItems = [...items];
-    const draggedItemIndex = currentItems.findIndex(item => item.id === draggedItem.id);
-    const targetItemIndex = currentItems.findIndex(item => item.id === targetItem.id);
+    const draggedItemIndex = currentItems.findIndex(item => item.name === draggedItem.name);
+    const targetItemIndex = currentItems.findIndex(item => item.name === targetItem.name);
     
     if (draggedItemIndex === -1 || targetItemIndex === -1) {
       return;

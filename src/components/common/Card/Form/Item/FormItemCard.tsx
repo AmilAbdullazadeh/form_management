@@ -5,7 +5,6 @@ import React from 'react';
 import { Button } from '@/components/common';
 import { FormCard } from '@/components/common/Card/Form/FormCard';
 import { BadgeVariant } from '@/components/common/Card/Form/types';
-import { parseDescriptionProperty } from '@/utils/form';
 
 import styles from './FormItemCard.module.scss';
 import { FormItemCardProps } from './types';
@@ -16,57 +15,48 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
   onDelete,
   className = ''
 }) => {
-  const { title, description, fields, submissions } = form;
+  const { name, isVisible, isReadOnly, fields } = form;
   
-  const isFormVisible = parseDescriptionProperty(description || '', 'isVisible');
-  const isFormReadOnly = parseDescriptionProperty(description || '', 'isReadOnly');
-
   // Get badge data based on type
   const getBadge = (type: 'visible' | 'readonly'): { text: string, variant: BadgeVariant } => {
     if (type === 'visible') {
       return {
-        text: isFormVisible ? 'Visible' : 'Hidden',
-        variant: isFormVisible ? 'success' : 'danger'
+        text: isVisible ? 'Visible' : 'Hidden',
+        variant: isVisible ? 'success' : 'danger'
       };
     } else {
       return {
-        text: isFormReadOnly ? 'Read Only' : 'Editable',
-        variant: isFormReadOnly ? 'warning' : 'success'
+        text: isReadOnly ? 'Read Only' : 'Editable',
+        variant: isReadOnly ? 'warning' : 'success'
       };
     }
   };
   
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onEdit) onEdit(form.id);
+    if (onEdit) onEdit(form._id!);
   };
   
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (onDelete) onDelete(form.id);
+    if (onDelete) onDelete(form._id!);
   };
 
-  const fieldCountDisplay = fields !== undefined ? {
+  const fieldCountDisplay = fields ? {
     icon: <span className={styles.fieldIcon}>📋</span>,
-    text: `${fields} ${fields === 1 ? 'field' : 'fields'}`
-  } : null;
-
-  const submissionsCountDisplay = submissions !== undefined ? {
-    icon: <span className={styles.submissionIcon}>📝</span>,
-    text: `${submissions} ${submissions === 1 ? 'submission' : 'submissions'}`
+    text: `${fields.length} ${fields.length === 1 ? 'field' : 'fields'}`
   } : null;
 
   return (
     <FormCard
-      title={title}
+      title={name}
       badge={[
         getBadge('visible'),
         getBadge('readonly')
       ]}
-      className={`${className} ${!isFormVisible ? styles.disabled : ''} ${isFormReadOnly ? styles.readOnly : ''}`}
+      className={`${className} ${!isVisible ? styles.disabled : ''} ${isReadOnly ? styles.readOnly : ''}`}
       metadata={[
-        ...(fieldCountDisplay ? [fieldCountDisplay] : []),
-        ...(submissionsCountDisplay ? [submissionsCountDisplay] : [])
+        ...(fieldCountDisplay ? [fieldCountDisplay] : [])
       ]}
       actions={
         <>
@@ -75,9 +65,9 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
               variant="secondary"
               size="sm"
               onClick={handleEdit}
-              disabled={!isFormVisible}
+              disabled={!isVisible}
             >
-              {isFormReadOnly ? 'Show Details' : 'Edit'}
+              {isReadOnly ? 'Show Details' : 'Edit'}
             </Button>
           )}
           
@@ -86,7 +76,7 @@ export const FormItemCard: React.FC<FormItemCardProps> = ({
               variant="danger"
               size="sm"
               onClick={handleDelete}
-              disabled={!isFormVisible || isFormReadOnly}
+              disabled={!isVisible || isReadOnly}
             >
               Delete
             </Button>

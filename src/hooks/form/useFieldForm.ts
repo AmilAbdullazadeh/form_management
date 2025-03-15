@@ -3,7 +3,26 @@
 import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 
 import { FORM_FIELD_VALIDATION_ERRORS } from '@/constants/form-labels';
-import { FieldFormValues, FieldType } from '@/types/form';
+
+export enum FieldType {
+  TEXT = 'text',
+  CHECKBOX = 'checkbox',
+  DROPDOWN = 'dropdown',
+  RADIO = 'radio',
+  TEXTAREA = 'textarea',
+  NUMBER = 'number',
+  DATE = 'date',
+  EMAIL = 'email'
+}
+
+export interface FieldFormValues {
+  type: string;
+  label: string;
+  placeholder?: string;
+  required: boolean;
+  options?: string;
+  defaultValue?: string;
+}
 
 export const DEFAULT_FIELD_VALUES: FieldFormValues = {
   type: FieldType.TEXT,
@@ -20,7 +39,7 @@ interface UseFieldFormProps {
   formId?: string;
 }
 
-export const useFieldForm = ({ onSave, onClose, formId }: UseFieldFormProps) => {
+export const useFieldForm = ({ onSave, onClose }: UseFieldFormProps) => {
   const [values, setValues] = useState<FieldFormValues>(DEFAULT_FIELD_VALUES);
   const [errors, setErrors] = useState<Partial<Record<keyof FieldFormValues, string>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

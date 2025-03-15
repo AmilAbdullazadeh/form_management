@@ -1,15 +1,10 @@
 import { ReactNode } from "react";
 
+import { Form } from "@/lib/redux/slices/apiSlice";
+
 export type BadgeVariant = 'primary' | 'success' | 'warning' | 'danger';
 
-export interface FormItem {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: string;
-    fields?: number;
-    submissions?: number;
-  }
+export type FormItem = Form;
 
 export interface FormCardProps {
   title: string;

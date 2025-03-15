@@ -6,11 +6,10 @@ import { Button } from '@/components/common/Button';
 import { Modal } from '@/components/common/Modal';
 import { FieldModal } from '@/components/modals/FieldModal/FieldModal';
 import { FORM_MODAL_TEXT } from '@/constants/form';
-import { FormModalMode } from '@/types/form';
 
 import { FormContent } from './FormModalContent';
 import styles from './FormModalContent.module.scss';
-import { FormModalRenderProps } from './types';
+import { FormModalMode, FormModalRenderProps } from './types';
 
 export const FormModalRenderer: React.FC<FormModalRenderProps> = ({
   isOpen,

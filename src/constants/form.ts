@@ -1,4 +1,4 @@
-import { FormModalMode } from '@/types/form';
+import { FormModalMode } from '@/components/modals/FormModalContent/types';
 
 export const  FORM_VALIDATION_ERRORS = {
   TITLE_REQUIRED: 'Form name is required',
