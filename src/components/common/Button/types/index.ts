@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ReactNode } from "react";
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'outline';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'outline' | 'warning';
 export type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -9,5 +9,6 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isLoading?: boolean;
   fullWidth?: boolean;
   className?: string;
-  children: ReactNode;
+  children?: ReactNode;
+  icon?: ReactNode;
 }

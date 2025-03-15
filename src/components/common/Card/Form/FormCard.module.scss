@@ -23,9 +23,7 @@
 }
 
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
+  @include flex-between-center;
   margin-bottom: $spacing-md;
   padding-bottom: $spacing-sm;
   border-bottom: 1px solid $gray-200;
@@ -37,16 +35,16 @@
   color: $gray-900;
   margin: 0;
   margin-bottom: $spacing-xs;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;    
 }
 
 .subtitle {
   font-size: $font-size-sm;
   color: $gray-600;
   margin-top: $spacing-xs;
-}
-
-.body {
-  margin-bottom: $spacing-md;
 }
 
 .footer {
@@ -64,12 +62,19 @@
   justify-content: center;
 }
 
+.badgeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+}
+
 .badge {
   display: inline-block;
   padding: $spacing-xs $spacing-sm;
   font-size: $font-size-xs;
   font-weight: $font-weight-medium;
   border-radius: 9999px;
+  text-align: center;
   margin-left: $spacing-xs;
 
   &.primary {
@@ -116,5 +121,7 @@
 
 .actions {
   display: flex;
-  gap: $spacing-xs;
+  justify-content: flex-end;
+  align-items: center;
+  gap: $spacing-sm;
 }

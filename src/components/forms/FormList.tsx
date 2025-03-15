@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 
-import { FormCardList, SkeletonFormList } from '@/components/common';
+import { Button, FormCardList, SkeletonFormList } from '@/components/common';
 import formStyles from '@/components/common/Card/Form/List/FormCardList.module.scss';
 import { useFormModal } from '@/components/common/Modal/FormModal/FormModal';
 import { FormModal } from '@/components/modals/FormModal/FormModal';
@@ -10,6 +10,7 @@ import { FORM_EMPTY_STATES } from '@/constants/form';
 import { FORM_BUTTON_TEXT } from '@/constants/form-labels';
 import { useDeleteFormMutation, useGetFormsQuery } from '@/lib/redux/slices/apiSlice';
 import { FormModalMode, FormModalState } from '@/types/form';
+import { Plus } from '@/assets/icons/Plus';
 
 export const FormList: React.FC = () => {
   const { openDeleteModal } = useFormModal();
@@ -94,12 +95,12 @@ export const FormList: React.FC = () => {
     <div>
       <div className="header">
         <h1>Form List</h1>
-        <button 
-          className="btn btn-primary" 
+        <Button
           onClick={handleOpenCreateModal}
+          icon={<Plus />}
         >
           {FORM_BUTTON_TEXT.CREATE_FORM}
-        </button>
+        </Button>
       </div>
       
       {renderContent()}
